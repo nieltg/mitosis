@@ -12,6 +12,42 @@ apply plugin: 'java'
 // Apply the application plugin to add support for building an application
 apply plugin: 'application'
 
+// Apply JDepend
+apply plugin: 'jdepend'
+
+tasks.withType(JDepend) {
+    reports {
+        text.enabled = true
+        xml.enabled = false
+    }
+}
+
+// Apply CheckStyle
+apply plugin: 'checkstyle'
+
+configurations {
+    checkstyleConfig
+}
+
+def versions = [
+    checkstyle: '7.6.1',
+    junit: '4.12'
+]
+
+dependencies {
+    // Use JUnit test framework
+    testCompile "junit:junit:${versions.junit}"
+
+    checkstyleConfig ("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
+        transitive = false
+    }
+}
+
+checkstyle {
+    toolVersion = "${versions.checkstyle}"
+    config = resources.text.fromArchiveEntry(configurations.checkstyleConfig, 'google_checks.xml')
+}
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use jcenter for resolving your dependencies.
@@ -19,14 +55,5 @@ repositories {
     jcenter()
 }
 
-dependencies {
-    // This dependency is found on compile classpath of this component and consumers.
-    compile 'com.google.guava:guava:20.0'
-
-    // Use JUnit test framework
-    testCompile 'junit:junit:4.12'
-}
-
 // Define the main class for the application
 mainClassName = 'App'
-
