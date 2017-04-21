@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.sterilecode.mitosis.iml" filepath="$PROJECT_DIR$/.idea/modules/com.sterilecode.mitosis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.sterilecode.mitosis_main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.sterilecode.mitosis_main.iml" group="com.sterilecode.mitosis" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.sterilecode.mitosis_test.iml" filepath="$PROJECT_DIR$/.idea/modules/com.sterilecode.mitosis_test.iml" group="com.sterilecode.mitosis" />
+    </modules>
+  </component>
+</project>
