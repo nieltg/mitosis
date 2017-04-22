@@ -3,14 +3,16 @@ package com.sterilecode.mitosis.model.gameobject;
 
 import com.sterilecode.mitosis.common.Vector;
 
+import java.util.Observable;
+
 /**
  * Created by Reinaldo on 4/22/2017.
  */
-public class GameObject {
+public class GameObject extends Observable{
 	protected Vector position;
 	protected Vector velocity;
 	protected int size;
-	private String viewId;
+	protected String viewId;
 
 	public GameObject(Vector position, Vector velocity, int size, String viewId) {
 		this.position = position;
@@ -19,7 +21,23 @@ public class GameObject {
 		this.viewId = viewId;
 	}
 
-	public void moveTo(Vector newPosition) {
+	public Vector getPosition() {
+		return position;
+	}
+
+	public Vector getVelocity() {
+		return position;
+	}
+
+	public String getViewId() {
+		return viewId;
+	}
+
+	public void setPosition(Vector newPosition) {
 		position = newPosition;
+	}
+
+	public void setVelocity(Vector newVelocity) {
+		velocity = newVelocity;
 	}
 }

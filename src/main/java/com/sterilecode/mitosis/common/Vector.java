@@ -1,5 +1,8 @@
 package com.sterilecode.mitosis.common;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 /**
  * Created by Reinaldo on 4/22/2017.
  */
@@ -37,8 +40,15 @@ public class Vector {
 		return (x == vector.x && y == vector.y);
 	}
 
-	public void translate(final double x, final double y) {
-		this.x += x;
-		this.y += y;
+	public Vector add(final Vector vector) {
+		return new Vector(x + vector.x, y + vector.y);
+	}
+
+	public Vector multiply(final double multiplier) {
+		return new Vector(x * multiplier, y * multiplier);
+	}
+
+	public Vector rotate(final double rotation) {
+		return new Vector(x*cos(rotation) - y*sin(rotation), x*sin(rotation) + y*cos(rotation));
 	}
 }

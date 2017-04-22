@@ -1,0 +1,19 @@
+package com.sterilecode.mitosis.model.behavior.straightbehavior;
+
+import com.sterilecode.mitosis.model.behavior.Behavior;
+import com.sterilecode.mitosis.model.gameobject.GameObject;
+
+import static com.sterilecode.mitosis.common.Constants.nanoSeconds;
+
+/**
+ * Created by Reinaldo on 4/22/2017.
+ */
+public class StraightBehavior extends Behavior{
+	public StraightBehavior(GameObject owner) {
+		super(owner);
+	}
+
+	public void move(long deltaTime) {
+		owner.setPosition(owner.getPosition().add(owner.getVelocity().multiply(deltaTime/nanoSeconds)));
+	}
+}
