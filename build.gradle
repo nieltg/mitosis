@@ -14,7 +14,7 @@ apply plugin: 'idea'            // Add IntelliJ IDEA support
 
 version = 0.1
 sourceCompatibility = 1.8
-mainClassName = 'App'
+mainClassName = 'com.sterilecode.mitosis.Main'
 
 def versions = [
         checkstyle: '7.6.1',
