@@ -132,6 +132,7 @@ public class GameController implements Runnable, Observer {
       final int playerSpacing = 100;
       int offsetX = - (playerCount - 1) * playerSpacing / 2 + i * playerSpacing;
       Player player = new Player(new Vector(centerX + offsetX, centerY));
+      player.addObserver(this);
       gameObjects.add(player);
       players.add(player);
     }
@@ -155,9 +156,9 @@ public class GameController implements Runnable, Observer {
     // TODO
 
     if (inputState.isPlayer1RotateLeftKeyPressed()) {
-      players.get(0).setAngularVelocity(Player.MAX_ANGULAR_VELOCITY);
-    } else if (inputState.isPlayer1RotateRightKeyPressed()) {
       players.get(0).setAngularVelocity(-Player.MAX_ANGULAR_VELOCITY);
+    } else if (inputState.isPlayer1RotateRightKeyPressed()) {
+      players.get(0).setAngularVelocity(Player.MAX_ANGULAR_VELOCITY);
     } else {
       players.get(0).setAngularVelocity(0.0);
     }
@@ -240,16 +241,19 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns enemies.
    */
   private void spawnEnemies() {
-    if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_MILLISECOND * 2000) {
+    if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_MILLISECOND * 500) {
       timeSinceLastEnemySpawn = currentTime;
       List<Class<? extends Enemy>> enemyClasses = new ArrayList<>();
       int classCount = 0;
       enemyClasses.add(Bacteria.class);
       ++classCount;
       Random random = new Random(System.currentTimeMillis());
+      Enemy newEnemy;
       switch(random.nextInt(classCount)) {
         case 0:
-          gameObjects.add(new Bacteria(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+          newEnemy = new Bacteria(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
+          newEnemy.addObserver(this);
+          gameObjects.add(newEnemy);
       }
     }
   }

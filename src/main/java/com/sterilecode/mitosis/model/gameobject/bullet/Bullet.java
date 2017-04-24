@@ -50,6 +50,6 @@ public class Bullet extends GameObject {
    * @param deltaTime Time between updates in nanoseconds.
    */
   public void update(long deltaTime) {
-    setPosition(getPosition().add(getVelocity().multiply(deltaTime / NANOSECONDS_IN_A_SECOND)));
+    setPosition(getPosition().add(getVelocity().multiply(deltaTime / (double) NANOSECONDS_IN_A_SECOND)));
   }
 }

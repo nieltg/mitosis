@@ -5,6 +5,7 @@ import com.sterilecode.mitosis.model.event.ShootEvent;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -45,12 +46,12 @@ public class Player extends GameObject {
   /**
    * Default minimum time required to shoot another bullet
    */
-  private final long defaultMinimumTimeToShoot = 1000;
+  private final long defaultMinimumTimeToShoot = NANOSECONDS_IN_A_MILLISECOND * 100;
 
   /**
    * Default speed of the bullet that is shot by the player.
    */
-  private final int defaultBulletSpeed = 10;
+  private final int defaultBulletSpeed = 100;
 
   /**
    * Player's current life.
@@ -73,20 +74,14 @@ public class Player extends GameObject {
   private int bulletSpeed;
 
   /**
-   * Velocity of the bullet shot by the player.
-   */
-  private Vector bulletVelocity;
-
-  /**
    * Constructor.
    */
   public Player(Vector position) {
-    super(position, - Math.PI / 2.0, new Vector(), 0.0, 24, "Player");
+    super(position, -Math.PI / 2.0, new Vector(), 0.0, 24, "Player");
     life = defaultLife;
     minimumTimeToShoot = defaultMinimumTimeToShoot;
     lastShotTime = 0;
     bulletSpeed = defaultBulletSpeed;
-    bulletVelocity = new Vector(bulletSpeed * cos(rotation), bulletSpeed * sin(rotation));
   }
 
   /**
@@ -108,13 +103,15 @@ public class Player extends GameObject {
    */
   public void shoot(long currentTime) {
     if (currentTime - lastShotTime > minimumTimeToShoot) {
+      this.setChanged();
+      Vector bulletVelocity = new Vector(bulletSpeed * cos(rotation), bulletSpeed * sin(rotation));
       notifyObservers(new ShootEvent(new Bullet(position, bulletVelocity, this)));
+      lastShotTime = currentTime;
     }
-    lastShotTime = currentTime;
   }
 
   public void update(long deltaTime) {
-    rotation += angularVelocity * deltaTime / NANOSECONDS_IN_A_SECOND;
+    rotation += angularVelocity * deltaTime / (double) NANOSECONDS_IN_A_SECOND;
   }
 
 }
