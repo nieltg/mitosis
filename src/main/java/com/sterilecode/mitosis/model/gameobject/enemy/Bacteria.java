@@ -16,11 +16,9 @@ public class Bacteria extends Enemy {
 	 * Constructor.
 	 *
 	 * @param position
-	 * @param velocity
-	 * @param size
 	 */
-	public Bacteria(Vector position, Vector velocity, double size) {
-		super(position, velocity, size, "Bacteria");
+	public Bacteria(Vector position) {
+		super(position, new Vector(0, 10), 5, "Bacteria");
 		behavior = new StraightBehavior(this);
 	}
 
@@ -28,6 +26,6 @@ public class Bacteria extends Enemy {
 	 * split.
 	 */
 	public void split() {
-		notifyObservers(new SplitEvent(new Bacteria(position, velocity, size)));
+		notifyObservers(new SplitEvent(new Bacteria(position)));
 	}
 }

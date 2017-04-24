@@ -3,17 +3,18 @@ package com.sterilecode.mitosis.controller;
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
+import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
+import com.sterilecode.mitosis.model.gameobject.enemy.Bacteria;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
+import com.sterilecode.mitosis.model.gameobject.powerup.ExtraLifePowerUp;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Math.abs;
@@ -206,14 +207,30 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns enemies.
    */
   private void spawnEnemies() {
-    // TODO
+    List<Class<? extends Enemy>> enemyClasses = new ArrayList<>();
+    int classCount = 0;
+    enemyClasses.add(Bacteria.class);
+    ++classCount;
+    Random random = new Random(System.currentTimeMillis());
+    switch(random.nextInt(classCount)) {
+      case 0:
+        gameObjects.add(new Bacteria(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+    }
   }
 
   /**
    * Randomly spawns power ups.
    */
   private void spawnPowerUps() {
-    // TODO
+    List<Class<? extends PowerUp>> powerUpClasses = new ArrayList<>();
+    int classCount = 0;
+    powerUpClasses.add(ExtraLifePowerUp.class);
+    ++classCount;
+    Random random = new Random(System.currentTimeMillis());
+    switch(random.nextInt(classCount)) {
+      case 0:
+        gameObjects.add(new ExtraLifePowerUp(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+    }
   }
 
   /**
