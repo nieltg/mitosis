@@ -20,7 +20,7 @@ public class EnemyA extends Enemy {
 	 * @param velocity
 	 * @param size
 	 */
-	public EnemyA(Vector position, Vector velocity, int size) {
+	public EnemyA(Vector position, Vector velocity, double size) {
 		super(position, velocity, size, "EnemyA");
 		behavior = new StraightBehavior(this);
 	}

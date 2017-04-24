@@ -72,7 +72,7 @@ public class Player extends GameObject {
 	 * @param position
 	 */
 	public Player(Vector position) {
-		super(position, new Vector(), 0, "Player");
+		super(position, new Vector(), 2, "Player");
 		life = defaultLife;
 		orientation = defaultOrientation;
 		minimumTimeToShoot = defaultMinimumTimeToShoot;

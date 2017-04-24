@@ -25,7 +25,7 @@ public abstract class Enemy extends GameObject{
 	 * @param size
 	 * @param viewId
 	 */
-	public Enemy(Vector position, Vector velocity, int size, String viewId) {
+	public Enemy(Vector position, Vector velocity, double size, String viewId) {
 		super(position, velocity, size, viewId);
 	}
 

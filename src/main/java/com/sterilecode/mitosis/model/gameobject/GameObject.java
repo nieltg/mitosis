@@ -38,7 +38,7 @@ public abstract class GameObject extends Observable{
 	 * @param size
 	 * @param viewId
 	 */
-	public GameObject(Vector position, Vector velocity, int size, String viewId) {
+	public GameObject(Vector position, Vector velocity, double size, String viewId) {
 		this.position = position;
 		this.velocity = velocity;
 		this.size = size;

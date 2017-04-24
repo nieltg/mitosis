@@ -11,25 +11,25 @@ public class VectorTest {
     Vector v1 = new Vector();
     Vector v2 = new Vector(3,4);
     @Test
-    public void getAbsis() throws Exception {
-        assertEquals(0.0d, v1.getAbsis(), 0);
+    public void getX() throws Exception {
+        assertEquals(0.0d, v1.getX(), 0);
     }
 
     @Test
-    public void getOrdinat() throws Exception {
-        assertEquals(0.0d, v1.getOrdinat(), 0);
+    public void getY() throws Exception {
+        assertEquals(0.0d, v1.getY(), 0);
     }
 
     @Test
-    public void setAbsis() throws Exception {
-        v1.setAbsis(3.0d);
-        assertEquals(3.0d, v1.getAbsis(), 0);
+    public void setX() throws Exception {
+        v1.setX(3.0d);
+        assertEquals(3.0d, v1.getX(), 0);
     }
 
     @Test
-    public void setOrdinat() throws Exception {
-        v1.setOrdinat(4.0d);
-        assertEquals(4.0d, v1.getAbsis(), 0);
+    public void setY() throws Exception {
+        v1.setY(4.0d);
+        assertEquals(4.0d, v1.getX(), 0);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class VectorTest {
     @Test
     public void add() throws Exception {
         v1.add(v2);
-        assertEquals(6, v1.getAbsis());
+        assertEquals(6, v1.getX());
     }
 
     @Test
