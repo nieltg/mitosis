@@ -1,5 +1,6 @@
 package com.sterilecode.mitosis.plugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,15 @@ public class PluginRegistry {
   }
 
   public void registerSupplier(ObjectSupplier supply) {
-    List<ObjectSupplier> supplyList = knownSupplies.get(supply.getObjectId());
+    String objectId = supply.getObjectId();
+
+    List<ObjectSupplier> supplyList = knownSupplies.get(objectId);
+
+    if (supplyList == null) {
+      supplyList = new ArrayList<>();
+      knownSupplies.put(objectId, supplyList);
+    }
+
     supplyList.add(supply);
 
     supply.addDisposalListener(supplyDisposalListener);
