@@ -25,9 +25,8 @@ public class ViewManager {
   public ImageIcon getResource (String resId) {
     ImageIcon val = resourcesMap.get(resId);
 
-    if (val == null)
-    {
-      final URL resource = getClass().getResource("/resources/icon/" + resId + ".png");
+    if (val == null) {
+      URL resource = getClass().getClassLoader().getResource("icon/" + resId + ".png");
 
       if (resource != null) {
         val = new ImageIcon(resource);
