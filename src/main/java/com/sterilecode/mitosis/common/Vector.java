@@ -20,7 +20,7 @@ public class Vector {
 		this.y = y;
 	}
 
-	public double getAbis() {
+	public double getAbsis() {
 		return x;
 	}
 

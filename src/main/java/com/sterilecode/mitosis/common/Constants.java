@@ -5,4 +5,7 @@ package com.sterilecode.mitosis.common;
  */
 public class Constants {
 	public static long nanoSeconds = 1000000;
+	public long getNanoSeconds() {
+		return nanoSeconds;
+	}
 }
