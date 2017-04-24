@@ -69,7 +69,7 @@ public abstract class GameObject extends Observable{
 	 *
 	 * @return size;
 	 */
-	public int getSize() {
+	public double getSize() {
 		return size;
 	}
 
