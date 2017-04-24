@@ -5,6 +5,7 @@ import com.sterilecode.mitosis.model.event.ShootEvent;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 

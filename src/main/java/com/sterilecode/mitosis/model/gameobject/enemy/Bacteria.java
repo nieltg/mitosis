@@ -1,9 +1,8 @@
-package com.sterilecode.mitosis.model.gameobject.enemy.enemya;
+package com.sterilecode.mitosis.model.gameobject.enemy;
 
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.straightbehavior.StraightBehavior;
 import com.sterilecode.mitosis.model.event.SplitEvent;
-import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 
 /**
  * Created by Reinaldo on 4/22/2017.
@@ -12,7 +11,7 @@ import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 /**
  * Enemy that has StraightBehavior
  */
-public class EnemyA extends Enemy {
+public class Bacteria extends Enemy {
 	/**
 	 * Constructor.
 	 *
@@ -20,8 +19,8 @@ public class EnemyA extends Enemy {
 	 * @param velocity
 	 * @param size
 	 */
-	public EnemyA(Vector position, Vector velocity, double size) {
-		super(position, velocity, size, "EnemyA");
+	public Bacteria(Vector position, Vector velocity, double size) {
+		super(position, velocity, size, "Bacteria");
 		behavior = new StraightBehavior(this);
 	}
 
@@ -29,6 +28,6 @@ public class EnemyA extends Enemy {
 	 * split.
 	 */
 	public void split() {
-		notifyObservers(new SplitEvent(new EnemyA(position, velocity, size)));
+		notifyObservers(new SplitEvent(new Bacteria(position, velocity, size)));
 	}
 }
