@@ -81,7 +81,7 @@ public class Player extends GameObject {
    * Constructor.
    */
   public Player(Vector position) {
-    super(position, Math.PI / 2.0, new Vector(), 0.0, 24, "Player");
+    super(position, - Math.PI / 2.0, new Vector(), 0.0, 24, "Player");
     life = defaultLife;
     minimumTimeToShoot = defaultMinimumTimeToShoot;
     lastShotTime = 0;

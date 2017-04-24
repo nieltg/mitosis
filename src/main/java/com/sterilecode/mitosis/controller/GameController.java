@@ -160,7 +160,7 @@ public class GameController implements Runnable, Observer {
    */
   private void updatePhysics(long deltaTime) {
     for (GameObject gameObject : gameObjects) {
-      //gameObject.getBehavior().update(deltaTime); // TODO
+      gameObject.update(deltaTime);
     }
   }
 
