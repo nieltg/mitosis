@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
 import java.util.List;
 
@@ -77,18 +78,23 @@ public class Renderer {
     // Draw game objects
     ViewManager viewManager = ViewManager.getInstance();
     for (GameObject gameObject : gameObjects) {
-      int objX = (int) Math.round(gameObject.getPosition().getX());
-      int objY = (int) Math.round(gameObject.getPosition().getY());
-      int objWidth = 50;
-      int objHeight = 50; // TODO: fix object size
+      int objTopLeftX = (int) Math.round(gameObject.getPosition().getX() - gameObject.getSize());
+      int objTopLeftY = (int) Math.round(gameObject.getPosition().getY() - gameObject.getSize());
+      int objCenterX = (int) Math.round(gameObject.getPosition().getX());
+      int objCenterY = (int) Math.round(gameObject.getPosition().getY());
+      int objWidth = (int) Math.round(gameObject.getSize() * 2);
+      int objHeight = (int) Math.round(gameObject.getSize() * 2);
       try {
         Image image = viewManager.getView(gameObject.getViewId());
-        graphics.drawImage(image, objX, objY, objX + objWidth - 1, objY + objHeight - 1,
+        AffineTransform originalTransform = graphics.getTransform();
+        graphics.rotate(gameObject.getRotation(), objCenterX, objCenterY);
+        graphics.drawImage(image, objTopLeftX, objTopLeftY, objTopLeftX + objWidth - 1, objTopLeftY + objHeight - 1,
             0, 0, image.getWidth(null), image.getHeight(null), null);
+        graphics.setTransform(originalTransform);
       } catch (ViewNotLoadedException exception) {
         // View not found, draw a placeholder
         graphics.setColor(Color.RED);
-        graphics.fillRect(objX, objY, objWidth, objHeight);
+        graphics.fillRect(objTopLeftX, objTopLeftY, objWidth, objHeight);
       }
     }
   }
