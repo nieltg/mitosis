@@ -4,6 +4,9 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISEC
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 import com.sterilecode.mitosis.model.gameobject.GameObject;
+import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
+import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
+import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
@@ -11,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -136,11 +144,54 @@ public class GameController implements Runnable, Observer {
     }
   }
 
+	/**
+	 * deleteObjects.
+	 * Remove all objects from gameObjects that is in mustDelete
+	 * @param mustDelete
+	 */
+  private void deleteObjects(List<GameObject> mustDelete) {
+  	for (GameObject delete : mustDelete) {
+  		for (GameObject gameObject : gameObjects) {
+  			if (delete == gameObject) {
+  				gameObjects.remove(gameObject);
+  				break;
+			  }
+		  }
+	  }
+  }
+
   /**
    * Checks game objects for collision (particularly bullets, powerups and enemies).
    */
-  private void collisionDetection() {
-    // TODO
+  private void detectCollision() {
+    List<GameObject> enemiesAndPowerUps = gameObjects.stream().filter(x -> x instanceof Enemy || x instanceof PowerUp)
+				                                  .collect(Collectors.toList());
+    List<Bullet> bullets = gameObjects.stream().filter(x -> x instanceof Bullet)
+				                        .map(y -> (Bullet) y).collect(Collectors.toList());
+    List<GameObject> mustDelete = new ArrayList<GameObject>();
+    for (Bullet bullet : bullets) {
+    	for (GameObject enemyOrPowerUp : enemiesAndPowerUps) {
+				if (pow(bullet.getSize() - enemyOrPowerUp.getSize(), 2)
+						<= pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX, 2)
+						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY, 2)
+						&& pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX, 2)
+						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY, 2)
+			 			<= pow(bullet.getSize() + enemyOrPowerUp.getSize(), 2)) {
+					if (enemyOrPowerUp instanceof PowerUp) {
+						((PowerUp) enemyOrPowerUp).applyPowerUp(enemyOrPowerUp.getOwner());
+					}
+					mustDelete.add(enemyOrPowerUp);
+		    }
+	    }
+    }
+    deleteObjects(mustDelete);
+  }
+
+	/**
+	 * Check if gameobjects' position are out of bound.
+	 */
+	private void detectOutOfBound() {
+  	// TODO
   }
 
   /**
