@@ -14,6 +14,8 @@ package com.sterilecode.mitosis;
  */
 
 import com.sterilecode.mitosis.controller.GameController;
+import com.sterilecode.mitosis.controller.GameDevice;
+import com.sterilecode.mitosis.view.swing.GameFrame;
 
 public class Main {
 
@@ -23,13 +25,18 @@ public class Main {
    */
   public static void main(String[] args) {
 
+    System.out.println("Hello!");
+
     // loadResources();
     // initializeUi();
 
     // TODO: show main menu
 
-    // In development, run GameController thread and wait for it to end
-    GameController gameController = new GameController();
+    // DEVELOPMENT: show game screen
+    GameDevice gameDevice = new GameFrame();
+
+    // DEVELOPMENT: run GameController thread and wait for it to end
+    GameController gameController = new GameController(gameDevice);
     Thread gameControllerThread = new Thread(gameController);
     gameControllerThread.start();
     try {

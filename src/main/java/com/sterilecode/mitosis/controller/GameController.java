@@ -1,5 +1,6 @@
 package com.sterilecode.mitosis.controller;
 
+import com.sterilecode.mitosis.view.Renderer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -25,6 +26,8 @@ public class GameController implements Runnable, Observer {
   private final long TARGET_FPS = 60;
   private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
 
+  private GameDevice gameDevice;
+  private Renderer renderer;
   private List<Object> gameObjects; // TODO: use GameObject
   private int score;
   private double fps;
@@ -33,8 +36,11 @@ public class GameController implements Runnable, Observer {
 
   /**
    * Creates a new GameController, ready to run.
+   * @param gameDevice An object which provides game IO and display.
    */
-  public GameController() {
+  public GameController(GameDevice gameDevice) {
+    this.gameDevice = gameDevice;
+    renderer = new Renderer(gameDevice);
     initializeGame();
   }
 
@@ -58,7 +64,7 @@ public class GameController implements Runnable, Observer {
       collisionDetection();
       spawnEnemies();
       spawnPowerUps();
-      render();
+      renderer.render(gameObjects);
 
       // If we are going faster than the ideal delta time, we can wait
       long extraTime = TARGET_DELTA_TIME - (System.nanoTime() - currentTime);
@@ -138,17 +144,6 @@ public class GameController implements Runnable, Observer {
 
   private void spawnPowerUps() {
     // TODO
-  }
-
-  /**
-   * Draws all game objects.
-   */
-  private void render() {
-    /* for (Object gameObject : gameObjects) {
-      Renderer.draw(gameObject);
-    }
-    Renderer.display();
-    */
   }
 
   /**
