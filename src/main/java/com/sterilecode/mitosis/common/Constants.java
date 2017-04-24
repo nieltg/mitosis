@@ -12,4 +12,7 @@ public class Constants {
 	 * Divisor to convert nanoSeconds to seconds.
 	 */
 	public static long nanoSeconds = 1000000;
+	public long getNanoSeconds() {
+		return nanoSeconds;
+	}
 }
