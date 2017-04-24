@@ -1,18 +1,22 @@
 package com.sterilecode.mitosis.common;
 
-/**
- * Created by Reinaldo on 4/22/2017.
+/*
+ * Mitosis - IF2210 Object-oriented Programming
+ * Group 1 - SterileCode
+ * - 13515001 [K-01] Jonathan Christopher
+ * - 13515002 [K-02] Wenny Yustalim
+ * - 13515071 [K-02] Daniel Pintara
+ * - 13515093 [K-03] Reinaldo Ignatius
+ * ***
+ * File name         : Constants.java
+ * Created at        : 4/22/17
+ * Last modified at  : 4/24/17
  */
 
 /**
- * Contain constants that are common in the project.
+ * Contains constants that are common in the project.
  */
 public class Constants {
-	/**
-	 * Divisor to convert nanoSeconds to seconds.
-	 */
-	public static long nanoSeconds = 1000000;
-	public long getNanoSeconds() {
-		return nanoSeconds;
-	}
+  public static final long NANOSECONDS_IN_A_SECOND = 1000000000;
+  public static final long NANOSECONDS_IN_A_MILLISECOND = 1000000;
 }

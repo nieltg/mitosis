@@ -10,11 +10,11 @@ package com.sterilecode.mitosis;
  * ***
  * File name         : Main.java
  * Created at        : 4/22/17
- * Last modified at  : 4/22/17
+ * Last modified at  : 4/24/17
  */
 
 import com.sterilecode.mitosis.controller.GameController;
-import com.sterilecode.mitosis.controller.GameDevice;
+import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
 import java.io.IOException;
@@ -27,9 +27,7 @@ public class Main {
    */
   public static void main(String[] args) {
 
-    System.out.println("Starting game...");
-
-    // Load views
+    // Load and cache views
     try {
       ViewManager.getInstance().loadViews();
     } catch (IOException exception) {
@@ -38,13 +36,10 @@ public class Main {
       return;
     }
 
-    // loadResources();
-    // initializeUi();
+    // Initialize and show Swing UI
+    GameDevice gameDevice = new GameFrame();
 
     // TODO: show main menu
-
-    // DEVELOPMENT: show game screen
-    GameDevice gameDevice = new GameFrame();
 
     // DEVELOPMENT: run GameController thread and wait for it to end
     GameController gameController = new GameController(gameDevice);
@@ -57,5 +52,4 @@ public class Main {
     }
 
   }
-
 }
