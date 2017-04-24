@@ -4,6 +4,8 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISEC
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 import com.sterilecode.mitosis.common.Vector;
+import com.sterilecode.mitosis.model.event.ShootEvent;
+import com.sterilecode.mitosis.model.event.SplitEvent;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 import com.sterilecode.mitosis.model.gameobject.enemy.Bacteria;
@@ -46,6 +48,8 @@ public class GameController implements Runnable, Observer {
   private long currentTime;
   private boolean isGameRunning;
   private List<Player> players;
+  private long timeSinceLastEnemySpawn;
+  private long timeSinceLastPowerUpSpawn;
 
   /**
    * Creates a new GameController, ready to run.
@@ -73,6 +77,7 @@ public class GameController implements Runnable, Observer {
       processInput();
       updatePhysics(deltaTime);
       detectCollision();
+      detectOutOfBound();
       spawnEnemies();
       spawnPowerUps();
       renderer.render(gameObjects);
@@ -98,7 +103,11 @@ public class GameController implements Runnable, Observer {
    */
   @Override
   public void update(Observable o, Object arg) {
-    // TODO: ShootEvent, SplitEvent handlers (add new objects to gameObject too)
+    if (arg instanceof ShootEvent) {
+      gameObjects.add(((ShootEvent) arg).getBullet());
+    } else if (arg instanceof SplitEvent) {
+      gameObjects.add(((SplitEvent) arg).getEnemy());
+    }
   }
 
   /**
@@ -131,6 +140,9 @@ public class GameController implements Runnable, Observer {
     fps = 0.0;
     currentTime = System.nanoTime();
     isGameRunning = true;
+
+    timeSinceLastEnemySpawn = 0;
+    timeSinceLastPowerUpSpawn = 0;
   }
 
   /**
@@ -148,6 +160,10 @@ public class GameController implements Runnable, Observer {
       players.get(0).setAngularVelocity(-Player.MAX_ANGULAR_VELOCITY);
     } else {
       players.get(0).setAngularVelocity(0.0);
+    }
+
+    if (inputState.isPlayer1ShootKeyPressed()) {
+      players.get(0).shoot(currentTime);
     }
 
   }
@@ -224,7 +240,8 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns enemies.
    */
   private void spawnEnemies() {
-    if (currentTime % NANOSECONDS_IN_A_SECOND == 0) {
+    if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_MILLISECOND * 2000) {
+      timeSinceLastEnemySpawn = currentTime;
       List<Class<? extends Enemy>> enemyClasses = new ArrayList<>();
       int classCount = 0;
       enemyClasses.add(Bacteria.class);
@@ -241,7 +258,8 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns power ups.
    */
   private void spawnPowerUps() {
-    if (currentTime % (NANOSECONDS_IN_A_MILLISECOND * 100) == 0) {
+    if (currentTime - timeSinceLastPowerUpSpawn > NANOSECONDS_IN_A_MILLISECOND * 5000) {
+      timeSinceLastPowerUpSpawn = currentTime;
       List<Class<? extends PowerUp>> powerUpClasses = new ArrayList<>();
       int classCount = 0;
       powerUpClasses.add(ExtraLifePowerUp.class);
