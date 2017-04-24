@@ -15,7 +15,9 @@ package com.sterilecode.mitosis;
 
 import com.sterilecode.mitosis.controller.GameController;
 import com.sterilecode.mitosis.controller.GameDevice;
+import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
+import java.io.IOException;
 
 public class Main {
 
@@ -25,7 +27,16 @@ public class Main {
    */
   public static void main(String[] args) {
 
-    System.out.println("Hello!");
+    System.out.println("Starting game...");
+
+    // Load views
+    try {
+      ViewManager.getInstance().loadViews();
+    } catch (IOException exception) {
+      System.out.println(exception.getMessage());
+      exception.printStackTrace();
+      return;
+    }
 
     // loadResources();
     // initializeUi();

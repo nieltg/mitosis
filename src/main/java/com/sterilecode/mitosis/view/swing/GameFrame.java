@@ -26,6 +26,7 @@ public class GameFrame extends JFrame implements GameDevice {
   private Insets insets;
 
   public GameFrame() {
+    setTitle("Mitosis");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setIgnoreRepaint(true);
     setResizable(false);

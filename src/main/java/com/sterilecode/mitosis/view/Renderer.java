@@ -13,10 +13,13 @@ package com.sterilecode.mitosis.view;
  * Last modified at  : 4/23/17
  */
 
+import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.controller.GameDevice;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
+import com.sterilecode.mitosis.view.ViewManager.ViewNotLoadedException;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.util.List;
@@ -32,8 +35,6 @@ public class Renderer {
     bufferStrategy = gameDevice.getBufferStrategy();
     bufferX = gameDevice.getBufferX();
     bufferY = gameDevice.getBufferY();
-    System.out.println(bufferX);
-    System.out.println(bufferY);
     bufferWidth = gameDevice.getBufferWidth();
     bufferHeight = gameDevice.getBufferHeight();
   }
@@ -76,10 +77,21 @@ public class Renderer {
     graphics.fillRect(0, 0, bufferWidth, bufferHeight);
 
     // Draw game objects
+    ViewManager viewManager = ViewManager.getInstance();
     for (GameObject gameObject : gameObjects) {
-      // TODO
-      gameObject.getViewId();
-      gameObject.getPosition();
+      int objX = (int) Math.round(gameObject.getPosition().getAbis());
+      int objY = (int) Math.round(gameObject.getPosition().getOrdinat());
+      int objWidth = 50;
+      int objHeight = 50; // TODO: fix object size
+      try {
+        Image image = viewManager.getView(gameObject.getViewId());
+        graphics.drawImage(image, objX, objY, objX + objWidth - 1, objY + objHeight - 1,
+            0, 0, image.getWidth(null), image.getHeight(null), null);
+      } catch (ViewNotLoadedException exception) {
+        // View not found, draw a placeholder
+        graphics.setColor(Color.RED);
+        graphics.fillRect(objX, objY, objWidth, objHeight);
+      }
     }
   }
 

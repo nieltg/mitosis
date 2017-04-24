@@ -7,10 +7,10 @@ import org.junit.Test;
 public class ViewManagerTest {
 
   @Test
-  public void getResource() throws Exception {
+  public void loadAndGetView() throws Exception {
     ViewManager vm = ViewManager.getInstance();
-
-    assertNotNull(vm.getResource("sample"));
+    vm.loadViews();
+    assertNotNull(vm.getView("sample"));
   }
 
   @Test
