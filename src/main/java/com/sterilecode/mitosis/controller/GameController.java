@@ -1,5 +1,6 @@
 package com.sterilecode.mitosis.controller;
 
+import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.view.Renderer;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.Observer;
 
 public class GameController implements Runnable, Observer {
 
+  // TODO: move to common.constants
   private final long NANOSECONDS_IN_A_SECOND = 1000000000;
   private final long NANOSECONDS_IN_A_MILLISECOND = 1000000;
   private final long TARGET_FPS = 60;
@@ -28,7 +30,7 @@ public class GameController implements Runnable, Observer {
 
   private GameDevice gameDevice;
   private Renderer renderer;
-  private List<Object> gameObjects; // TODO: use GameObject
+  private List<GameObject> gameObjects;
   private int score;
   private double fps;
   private long currentTime;
@@ -102,7 +104,7 @@ public class GameController implements Runnable, Observer {
    */
   private void initializeGame() {
 
-    // TODO: seed random, clear gameObjects, add player to gameObjects
+    // TODO: seed random, add player to gameObjects
     gameObjects = new ArrayList<>(); // TODO: investigate performance when deleting
     score = 0;
 
@@ -123,31 +125,34 @@ public class GameController implements Runnable, Observer {
    * @param deltaTime Time elapsed between last frame and current frame.
    */
   private void updatePhysics(long deltaTime) {
-    /* for (Object gameObject : gameObjects) {
-      gameObject.update(deltaTime);
-    }*/
+    for (GameObject gameObject : gameObjects) {
+      //gameObject.update(deltaTime); // TODO
+    }
   }
 
   /**
-   * Checks game objects for collision (particularly bullets, powerups and enemies)
+   * Checks game objects for collision (particularly bullets, powerups and enemies).
    */
   private void collisionDetection() {
     // TODO
   }
 
   /**
-   * Randomly spawns enemies
+   * Randomly spawns enemies.
    */
   private void spawnEnemies() {
     // TODO
   }
 
+  /**
+   * Randomly spawns power ups.
+   */
   private void spawnPowerUps() {
     // TODO
   }
 
   /**
-   * Ends the game - displays game over text and high score
+   * Ends the game - displays game over text and high score.
    */
   private void gameOver() {
     // TODO

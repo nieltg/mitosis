@@ -14,6 +14,7 @@ package com.sterilecode.mitosis.view;
  */
 
 import com.sterilecode.mitosis.controller.GameDevice;
+import com.sterilecode.mitosis.model.gameobject.GameObject;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
@@ -41,7 +42,7 @@ public class Renderer {
    * Renders game objects on the Renderer's game device's buffer.
    * @param gameObjects List of game objects to be rendered.
    */
-  public void render(List<Object> gameObjects) { // TODO: GameObjects
+  public void render(List<GameObject> gameObjects) {
     try {
       Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 
@@ -64,24 +65,22 @@ public class Renderer {
     }
   }
 
-  // DEBUG
-  private int xx = 0;
-
   /**
    * Draws game objects on the provided graphics object.s
    * @param gameObjects The game objects to be drawn.
    * @param graphics The graphics object which is drawn on.
    */
-  private void drawGame(List<Object> gameObjects, Graphics2D graphics) {
+  private void drawGame(List<GameObject> gameObjects, Graphics2D graphics) {
     // Draw background
     graphics.setColor(Color.WHITE);
     graphics.fillRect(0, 0, bufferWidth, bufferHeight);
 
-    graphics.setColor(Color.RED);
-    graphics.fillRect(xx, 100, 10, 10);
-    xx++;
-
-
+    // Draw game objects
+    for (GameObject gameObject : gameObjects) {
+      // TODO
+      gameObject.getViewId();
+      gameObject.getPosition();
+    }
   }
 
 }
