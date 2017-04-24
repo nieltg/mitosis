@@ -13,8 +13,6 @@ package com.sterilecode.mitosis.view;
  * Last modified at  : 4/23/17
  */
 
-import com.sterilecode.mitosis.common.Vector;
-import com.sterilecode.mitosis.controller.GameDevice;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.view.ViewManager.ViewNotLoadedException;
 import java.awt.Color;
@@ -79,8 +77,8 @@ public class Renderer {
     // Draw game objects
     ViewManager viewManager = ViewManager.getInstance();
     for (GameObject gameObject : gameObjects) {
-      int objX = (int) Math.round(gameObject.getPosition().getAbis());
-      int objY = (int) Math.round(gameObject.getPosition().getOrdinat());
+      int objX = (int) Math.round(gameObject.getPosition().getX());
+      int objY = (int) Math.round(gameObject.getPosition().getY());
       int objWidth = 50;
       int objHeight = 50; // TODO: fix object size
       try {

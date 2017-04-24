@@ -1,9 +1,14 @@
 package com.sterilecode.mitosis.controller;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
+
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
+import com.sterilecode.mitosis.view.GameDevice;
+import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +35,6 @@ import static java.lang.Math.sqrt;
 
 public class GameController implements Runnable, Observer {
 
-  // TODO: move to common.constants
-  private final long NANOSECONDS_IN_A_SECOND = 1000000000;
-  private final long NANOSECONDS_IN_A_MILLISECOND = 1000000;
   private final long TARGET_FPS = 60;
   private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
 
@@ -75,6 +77,7 @@ public class GameController implements Runnable, Observer {
       spawnEnemies();
       spawnPowerUps();
       renderer.render(gameObjects);
+      //renderer.renderDebugInfo(fps, inputStatus);
 
       // If we are going faster than the ideal delta time, we can wait
       long extraTime = TARGET_DELTA_TIME - (System.nanoTime() - currentTime);
@@ -124,7 +127,10 @@ public class GameController implements Runnable, Observer {
   /**
    * Do actions according to input received from the Swing thread.
    */
+
   private void processInput() {
+    InputState inputState = gameDevice.getInputState().clone();
+
     // TODO
   }
 
@@ -134,7 +140,7 @@ public class GameController implements Runnable, Observer {
    */
   private void updatePhysics(long deltaTime) {
     for (GameObject gameObject : gameObjects) {
-      //gameObject.update(deltaTime); // TODO
+      //gameObject.getBehavior().update(deltaTime); // TODO
     }
   }
 
