@@ -9,133 +9,112 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-/**
- * Created by Reinaldo on 4/22/2017.
+/*
+ * Mitosis - IF2210 Object-oriented Programming
+ * Group 1 - SterileCode
+ * - 13515001 [K-01] Jonathan Christopher
+ * - 13515002 [K-02] Wenny Yustalim
+ * - 13515071 [K-02] Daniel Pintara
+ * - 13515093 [K-03] Reinaldo Ignatius
+ * ***
+ * File name         : Player.java
+ * Created at        : 4/22/2017
+ * Last modified at  : 4/24/2017
  */
 
 /**
  * A class that is used to represent player.
  */
 public class Player extends GameObject {
-	/**
-	 * Default life of the player.
-	 */
-	private final int defaultLife = 3;
-
-	/**
-	 * Default orientation of the player
-	 */
-	private final double defaultOrientation = 0;
-
-	/**
-	 * Default minimum time required to shoot another bullet
-	 */
-	private final long defaultMinimumTimeToShoot = 1000;
-
-	/**
-	 * Default speed of the bullet that is shot by the player.
-	 */
-	private final int defaultBulletSpeed = 10;
 
   /**
    * Rotation speed
    */
-	private final int rotationSpeed = 10;
-
-	/**
-	 * Player's current life.
-	 */
-	private int life;
-
-	/**
-	 * Player's current orientation.
-	 */
-	private double orientation;
-
-	/**
-	 * Player's current minimum time required to shoot another bullet.
-	 */
-	private long minimumTimeToShoot;
-
-	/**
-	 * Last time the player shoot.
-	 */
-	private long lastShotTime;
-
-	/**
-	 * Current speed of the bullet that is shot by the player.
-	 */
-	private int bulletSpeed;
-
-	/**
-	 * Velocity of the bullet shot by the player.
-	 */
-	private Vector bulletVelocity;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param position
-	 */
-	public Player(Vector position) {
-		super(position, new Vector(), 2, "Player");
-		life = defaultLife;
-		orientation = defaultOrientation;
-		minimumTimeToShoot = defaultMinimumTimeToShoot;
-		lastShotTime = 0;
-		bulletSpeed = defaultBulletSpeed;
-		bulletVelocity = new Vector(bulletSpeed * cos(orientation), bulletSpeed * sin(orientation));
-	}
-
-	/**
-	 * increaseLife.
-	 *
-	 * @param increment
-	 */
-	public void increaseLife(int increment) {
-		life += increment;
-	}
-
-	/**
-	 * decreaseLife.
-	 *
-	 * @param decrement
-	 */
-	public void decreaseLife(int decrement) {
-		life -= decrement;
-	}
-
-
-	/**
-	 * rotate.
-	 *
-	 * @param rotation
-	 */
-	public void rotate(double rotation) {
-		this.orientation += rotation;
-		bulletVelocity = bulletVelocity.rotate(rotation);
-	}
-
-	/**
-	 * shoot.
-	 *
-	 * @param currentTime
-	 */
-	public void shoot(long currentTime) {
-		if (currentTime - lastShotTime > minimumTimeToShoot) {
-			notifyObservers(new ShootEvent(new Bullet(position, bulletVelocity, this)));
-		}
-		lastShotTime = currentTime;
-	}
+  public static final double MAX_ANGULAR_VELOCITY = 2.0;
 
   /**
-   * update.
-   * Not implemented.
-   * @param deltaTime
+   * Default life of the player.
    */
-	public void update(long deltaTime) {}
+  private final int defaultLife = 3;
 
-	public void update(long deltaTime, boolean counterClockwise) {
-    rotate(rotationSpeed / size * deltaTime/NANOSECONDS_IN_A_SECOND);
+  /**
+   * Default rotation of the player
+   */
+  private final double defaultRotation = 0;
+
+  /**
+   * Default minimum time required to shoot another bullet
+   */
+  private final long defaultMinimumTimeToShoot = 1000;
+
+  /**
+   * Default speed of the bullet that is shot by the player.
+   */
+  private final int defaultBulletSpeed = 10;
+
+  /**
+   * Player's current life.
+   */
+  private int life;
+
+  /**
+   * Player's current minimum time required to shoot another bullet.
+   */
+  private long minimumTimeToShoot;
+
+  /**
+   * Last time the player shoot.
+   */
+  private long lastShotTime;
+
+  /**
+   * Current speed of the bullet that is shot by the player.
+   */
+  private int bulletSpeed;
+
+  /**
+   * Velocity of the bullet shot by the player.
+   */
+  private Vector bulletVelocity;
+
+  /**
+   * Constructor.
+   */
+  public Player(Vector position) {
+    super(position, Math.PI / 2.0, new Vector(), 0.0, 24, "Player");
+    life = defaultLife;
+    minimumTimeToShoot = defaultMinimumTimeToShoot;
+    lastShotTime = 0;
+    bulletSpeed = defaultBulletSpeed;
+    bulletVelocity = new Vector(bulletSpeed * cos(rotation), bulletSpeed * sin(rotation));
   }
+
+  /**
+   * increaseLife.
+   */
+  public void increaseLife(int increment) {
+    life += increment;
+  }
+
+  /**
+   * decreaseLife.
+   */
+  public void decreaseLife(int decrement) {
+    life -= decrement;
+  }
+
+  /**
+   * shoot.
+   */
+  public void shoot(long currentTime) {
+    if (currentTime - lastShotTime > minimumTimeToShoot) {
+      notifyObservers(new ShootEvent(new Bullet(position, bulletVelocity, this)));
+    }
+    lastShotTime = currentTime;
+  }
+
+  public void update(long deltaTime) {
+    rotation += angularVelocity * deltaTime / NANOSECONDS_IN_A_SECOND;
+  }
+
 }

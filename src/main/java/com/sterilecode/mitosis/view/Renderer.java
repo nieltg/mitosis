@@ -77,10 +77,10 @@ public class Renderer {
     // Draw game objects
     ViewManager viewManager = ViewManager.getInstance();
     for (GameObject gameObject : gameObjects) {
-      int objX = (int) Math.round(gameObject.getPosition().getX());
-      int objY = (int) Math.round(gameObject.getPosition().getY());
-      int objWidth = 50;
-      int objHeight = 50; // TODO: fix object size
+      int objX = (int) Math.round(gameObject.getPosition().getX() - gameObject.getSize());
+      int objY = (int) Math.round(gameObject.getPosition().getY() - gameObject.getSize());
+      int objWidth = (int) Math.round(gameObject.getSize() * 2);
+      int objHeight = (int) Math.round(gameObject.getSize() * 2);
       try {
         Image image = viewManager.getView(gameObject.getViewId());
         graphics.drawImage(image, objX, objY, objX + objWidth - 1, objY + objHeight - 1,

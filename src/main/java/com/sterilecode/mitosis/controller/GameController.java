@@ -8,6 +8,7 @@ import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 import com.sterilecode.mitosis.model.gameobject.enemy.Bacteria;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
+import com.sterilecode.mitosis.model.gameobject.player.Player;
 import com.sterilecode.mitosis.model.gameobject.powerup.ExtraLifePowerUp;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
 import com.sterilecode.mitosis.view.GameDevice;
@@ -46,15 +47,16 @@ public class GameController implements Runnable, Observer {
   private double fps;
   private long currentTime;
   private boolean isGameRunning;
+  private List<Player> players;
 
   /**
    * Creates a new GameController, ready to run.
    * @param gameDevice An object which provides game IO and display.
    */
-  public GameController(GameDevice gameDevice) {
+  public GameController(GameDevice gameDevice, int playerCount) {
     this.gameDevice = gameDevice;
     renderer = new Renderer(gameDevice);
-    initializeGame();
+    initializeGame(playerCount);
   }
 
   /**
@@ -62,8 +64,6 @@ public class GameController implements Runnable, Observer {
    */
   @Override
   public void run() {
-
-    initializeGame();
 
     // The game loop - variable delta time
     while (isGameRunning) {
@@ -114,12 +114,22 @@ public class GameController implements Runnable, Observer {
   /**
    * Resets game to a state ready to be started as a new game.
    */
-  private void initializeGame() {
+  private void initializeGame(int playerCount) {
+    gameObjects = new ArrayList<>();
 
-    // TODO: seed random, add player to gameObjects
-    gameObjects = new ArrayList<>(); // TODO: investigate performance when deleting
+    // Add players
+    players = new ArrayList<>();
+    for (int i = 0; i < playerCount; i++) {
+      int centerX = gameDevice.getBufferWidth() / 2;
+      int centerY = gameDevice.getBufferHeight() / 2;
+      final int playerSpacing = 100;
+      int offsetX = - (playerCount - 1) * playerSpacing / 2 + i * playerSpacing;
+      Player player = new Player(new Vector(centerX + offsetX, centerY));
+      gameObjects.add(player);
+      players.add(player);
+    }
+
     score = 0;
-
     fps = 0.0;
     currentTime = System.nanoTime();
     isGameRunning = true;
@@ -133,6 +143,15 @@ public class GameController implements Runnable, Observer {
     InputState inputState = gameDevice.getInputState().clone();
 
     // TODO
+
+    if (inputState.isPlayer1RotateLeftKeyPressed()) {
+      players.get(0).setAngularVelocity(Player.MAX_ANGULAR_VELOCITY);
+    } else if (inputState.isPlayer1RotateRightKeyPressed()) {
+      players.get(0).setAngularVelocity(-Player.MAX_ANGULAR_VELOCITY);
+    } else {
+      players.get(0).setAngularVelocity(0.0);
+    }
+
   }
 
   /**

@@ -27,7 +27,7 @@ public abstract class PowerUp extends GameObject {
 	 * @param viewId
 	 */
 	public PowerUp(Vector position, Vector velocity, int size, String viewId) {
-		super(position, velocity, size, viewId);
+		super(position, 0.0, velocity, 0.0, size, viewId);
 	}
 
   /**
