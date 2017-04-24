@@ -30,6 +30,15 @@ public abstract class PowerUp extends GameObject {
 		super(position, velocity, size, viewId);
 	}
 
+  /**
+   * getBehavior.
+   *
+   * @return behavior
+   */
+	public Behavior getBehavior() {
+	  return behavior;
+  }
+
 	/**
 	 * applyPowerUp.
 	 * An abstract method.

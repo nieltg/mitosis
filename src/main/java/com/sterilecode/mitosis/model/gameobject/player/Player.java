@@ -121,4 +121,11 @@ public class Player extends GameObject {
 		}
 		lastShotTime = currentTime;
 	}
+
+  /**
+   * update.
+   * Not implemented.
+   * @param deltaTime
+   */
+	public void update(long deltaTime) {}
 }
