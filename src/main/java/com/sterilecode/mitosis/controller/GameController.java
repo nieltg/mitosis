@@ -73,7 +73,7 @@ public class GameController implements Runnable, Observer {
 
       processInput();
       updatePhysics(deltaTime);
-      collisionDetection();
+      detectCollision();
       spawnEnemies();
       spawnPowerUps();
       renderer.render(gameObjects);
@@ -172,13 +172,13 @@ public class GameController implements Runnable, Observer {
     for (Bullet bullet : bullets) {
     	for (GameObject enemyOrPowerUp : enemiesAndPowerUps) {
 				if (pow(bullet.getSize() - enemyOrPowerUp.getSize(), 2)
-						<= pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX, 2)
-						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY, 2)
-						&& pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX, 2)
-						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY, 2)
+						<= pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
+						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
+						&& pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
+						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
 			 			<= pow(bullet.getSize() + enemyOrPowerUp.getSize(), 2)) {
 					if (enemyOrPowerUp instanceof PowerUp) {
-						((PowerUp) enemyOrPowerUp).applyPowerUp(enemyOrPowerUp.getOwner());
+						((PowerUp) enemyOrPowerUp).applyPowerUp(bullet.getOwner());
 					}
 					mustDelete.add(enemyOrPowerUp);
 		    }

@@ -2,6 +2,7 @@ package com.sterilecode.mitosis.model.gameobject.bullet;
 
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
+import com.sterilecode.mitosis.model.gameobject.player.Player;
 
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
@@ -13,15 +14,29 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
  * A class that is used to represent a bullet.
  */
 public class Bullet extends GameObject{
+  /**
+   * Owner of the bullet.
+   */
+  private Player owner;
+
 	/**
 	 * Constructor.
 	 *
 	 * @param position
 	 * @param velocity
 	 */
-	public Bullet(Vector position, Vector velocity) {
+	public Bullet(Vector position, Vector velocity, Player owner) {
 		super(position, velocity, 2, "Bullet");
+		this.owner = owner;
 	}
+
+  /**
+   * getOwner
+   * @return Player
+   */
+	public Player getOwner() {
+	  return owner;
+  }
 
   /**
    * update.
