@@ -36,6 +36,11 @@ public class Player extends GameObject {
 	 */
 	private final int defaultBulletSpeed = 10;
 
+  /**
+   * Rotation speed
+   */
+	private final int rotationSpeed = 10;
+
 	/**
 	 * Player's current life.
 	 */
@@ -128,4 +133,8 @@ public class Player extends GameObject {
    * @param deltaTime
    */
 	public void update(long deltaTime) {}
+
+	public void update(long deltaTime, boolean counterClockwise) {
+    rotate(rotationSpeed / size * deltaTime/NANOSECONDS_IN_A_SECOND);
+  }
 }
