@@ -18,9 +18,7 @@ import com.sterilecode.mitosis.view.Renderer;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.lang.Math.abs;
 import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -226,14 +224,16 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns enemies.
    */
   private void spawnEnemies() {
-    List<Class<? extends Enemy>> enemyClasses = new ArrayList<>();
-    int classCount = 0;
-    enemyClasses.add(Bacteria.class);
-    ++classCount;
-    Random random = new Random(System.currentTimeMillis());
-    switch(random.nextInt(classCount)) {
-      case 0:
-        gameObjects.add(new Bacteria(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+    if (currentTime % NANOSECONDS_IN_A_SECOND == 0) {
+      List<Class<? extends Enemy>> enemyClasses = new ArrayList<>();
+      int classCount = 0;
+      enemyClasses.add(Bacteria.class);
+      ++classCount;
+      Random random = new Random(System.currentTimeMillis());
+      switch(random.nextInt(classCount)) {
+        case 0:
+          gameObjects.add(new Bacteria(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+      }
     }
   }
 
@@ -241,14 +241,16 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns power ups.
    */
   private void spawnPowerUps() {
-    List<Class<? extends PowerUp>> powerUpClasses = new ArrayList<>();
-    int classCount = 0;
-    powerUpClasses.add(ExtraLifePowerUp.class);
-    ++classCount;
-    Random random = new Random(System.currentTimeMillis());
-    switch(random.nextInt(classCount)) {
-      case 0:
-        gameObjects.add(new ExtraLifePowerUp(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+    if (currentTime % (NANOSECONDS_IN_A_MILLISECOND * 100) == 0) {
+      List<Class<? extends PowerUp>> powerUpClasses = new ArrayList<>();
+      int classCount = 0;
+      powerUpClasses.add(ExtraLifePowerUp.class);
+      ++classCount;
+      Random random = new Random(System.currentTimeMillis());
+      switch(random.nextInt(classCount)) {
+        case 0:
+          gameObjects.add(new ExtraLifePowerUp(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+      }
     }
   }
 
