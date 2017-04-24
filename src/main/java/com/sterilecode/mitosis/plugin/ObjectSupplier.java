@@ -3,28 +3,28 @@ package com.sterilecode.mitosis.plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServiceSupplier {
+public class ObjectSupplier {
 
   private final List<DisposalListener> disposalListeners = new ArrayList<>();
 
-  private final String supplyServiceId;
-  private final Object supplyServiceObj;
+  private final String supplyObjectId;
+  private final Object supplyObject;
 
-  public ServiceSupplier(String serviceId, Object serviceObject) {
-    supplyServiceId = serviceId;
-    supplyServiceObj = serviceObject;
+  public ObjectSupplier(String objectId, Object obj) {
+    supplyObjectId = objectId;
+    supplyObject = obj;
   }
 
   protected void notifyDisposal() {
     disposalListeners.forEach(listener -> listener.pluginDisposed(this));
   }
 
-  public String getServiceId() {
-    return supplyServiceId;
+  public String getObjectId() {
+    return supplyObjectId;
   }
 
-  public Object getServiceObject() {
-    return supplyServiceObj;
+  public Object getObject() {
+    return supplyObject;
   }
 
   public void addDisposalListener(DisposalListener listener) {
@@ -37,6 +37,6 @@ public class ServiceSupplier {
 
   public interface DisposalListener {
 
-    void pluginDisposed(ServiceSupplier source);
+    void pluginDisposed(ObjectSupplier source);
   }
 }

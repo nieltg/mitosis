@@ -9,15 +9,11 @@ public class PluginRegistry {
 
   private static final PluginRegistry pluginRegistryInstance = new PluginRegistry();
 
-  private final Map<String, List<ServiceSupplier>> knownSupplies = new HashMap<>();
+  private final Map<String, List<ObjectSupplier>> knownSupplies = new HashMap<>();
 
-  private final ServiceSupplier.DisposalListener supplyDisposalListener = new ServiceSupplier.DisposalListener() {
-
-    @Override
-    public void pluginDisposed(ServiceSupplier source) {
-      List<ServiceSupplier> supplyList = knownSupplies.get(source.getServiceId());
-      supplyList.remove(source);
-    }
+  private final ObjectSupplier.DisposalListener supplyDisposalListener = source -> {
+    List<ObjectSupplier> supplyList = knownSupplies.get(source.getObjectId());
+    supplyList.remove(source);
   };
 
   private PluginRegistry() {
@@ -27,18 +23,18 @@ public class PluginRegistry {
     return pluginRegistryInstance;
   }
 
-  public void registerSupply(ServiceSupplier supply) {
-    List<ServiceSupplier> supplyList = knownSupplies.get(supply.getServiceId());
+  public void registerSupplier(ObjectSupplier supply) {
+    List<ObjectSupplier> supplyList = knownSupplies.get(supply.getObjectId());
     supplyList.add(supply);
 
     supply.addDisposalListener(supplyDisposalListener);
   }
 
-  public List<Object> getServices(String serviceId) {
-    List<ServiceSupplier> supplies = knownSupplies.get(serviceId);
+  public List<Object> getObjects(String objectId) {
+    List<ObjectSupplier> supplies = knownSupplies.get(objectId);
 
     return supplies.stream()
-        .map(supply -> supply.getServiceObject())
+        .map(supply -> supply.getObject())
         .collect(Collectors.toList());
   }
 }

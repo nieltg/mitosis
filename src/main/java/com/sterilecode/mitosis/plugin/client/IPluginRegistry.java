@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IPluginRegistry {
 
-  void registerService(String serviceId, Object serviceObject);
+  void registerObject(String serviceId, Object serviceObject);
 
-  List<Object> getServices(String serviceId);
+  List<Object> getObjects(String serviceId);
 }

@@ -12,22 +12,22 @@ public class PluginRegistryProxy implements IPluginRegistry {
   }
 
   @Override
-  public void registerService(String serviceId, Object serviceObject) {
-    ServiceSupplier supply = new Supplier(pluginInstance, serviceId, serviceObject);
-    PluginRegistry.getInstance().registerSupply(supply);
+  public void registerObject(String objectId, Object obj) {
+    ObjectSupplier supply = new Supplier(pluginInstance, objectId, obj);
+    PluginRegistry.getInstance().registerSupplier(supply);
   }
 
   @Override
-  public List<Object> getServices(String serviceId) {
-    return PluginRegistry.getInstance().getServices(serviceId);
+  public List<Object> getObjects(String objectId) {
+    return PluginRegistry.getInstance().getObjects(objectId);
   }
 
-  public static class Supplier extends ServiceSupplier {
+  public static class Supplier extends ObjectSupplier {
 
-    public Supplier(Plugin plugin, String serviceId, Object serviceObject) {
-      super(serviceId, serviceObject);
+    public Supplier(Plugin plugin, String objectId, Object obj) {
+      super(objectId, obj);
 
-      plugin.addDisposalListener((Plugin obj) -> {
+      plugin.addDisposalListener((Plugin unused1) -> {
         notifyDisposal();
       });
     }
