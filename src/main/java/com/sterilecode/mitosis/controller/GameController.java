@@ -1,5 +1,8 @@
 package com.sterilecode.mitosis.controller;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
+
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.InputState;
@@ -24,9 +27,6 @@ import java.util.Observer;
 
 public class GameController implements Runnable, Observer {
 
-  // TODO: move to common.constants
-  private final long NANOSECONDS_IN_A_SECOND = 1000000000;
-  private final long NANOSECONDS_IN_A_MILLISECOND = 1000000;
   private final long TARGET_FPS = 60;
   private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
 
