@@ -3,7 +3,7 @@ package com.sterilecode.mitosis.model.gameobject.bullet;
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 
-import static com.sterilecode.mitosis.common.Constants.nanoSeconds;
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 /**
  * Created by Reinaldo on 4/22/2017.
@@ -29,6 +29,6 @@ public class Bullet extends GameObject{
    * @param deltaTime
    */
   public void update(long deltaTime) {
-    setPosition(getPosition().add(getVelocity().multiply(deltaTime/nanoSeconds)));
+    setPosition(getPosition().add(getVelocity().multiply(deltaTime/NANOSECONDS_IN_A_SECOND)));
   }
 }
