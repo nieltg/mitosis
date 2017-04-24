@@ -100,4 +100,11 @@ public abstract class GameObject extends Observable{
 	public void setVelocity(Vector newVelocity) {
 		velocity = newVelocity;
 	}
+
+	/**
+	 * update.
+	 * Update gameobjects attributes in deltaTime period.
+	 */
+	public abstract void update(long deltatime);
 }
+

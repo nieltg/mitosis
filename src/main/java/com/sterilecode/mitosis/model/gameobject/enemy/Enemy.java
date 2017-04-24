@@ -29,6 +29,19 @@ public abstract class Enemy extends GameObject{
 		super(position, velocity, size, viewId);
 	}
 
+  /**
+   * getBehavior
+   *
+   * @return behavior.
+   */
+	public Behavior getBehavior() {
+		return behavior;
+	}
+
+	public void Update(long deltaTime) {
+	  behavior.move(deltaTime);
+  }
+
 	/**
 	 * split.
 	 * Split enemy into 2 enemies that are identical to the original.
