@@ -168,7 +168,7 @@ public class GameController implements Runnable, Observer {
 				                                  .collect(Collectors.toList());
     List<Bullet> bullets = gameObjects.stream().filter(x -> x instanceof Bullet)
 				                        .map(y -> (Bullet) y).collect(Collectors.toList());
-    List<GameObject> mustDelete = new ArrayList<GameObject>();
+    List<GameObject> mustDelete = new ArrayList<>();
     for (Bullet bullet : bullets) {
     	for (GameObject enemyOrPowerUp : enemiesAndPowerUps) {
 				if (pow(bullet.getSize() - enemyOrPowerUp.getSize(), 2)
@@ -191,7 +191,15 @@ public class GameController implements Runnable, Observer {
 	 * Check if gameobjects' position are out of bound.
 	 */
 	private void detectOutOfBound() {
-  	// TODO
+  	List<GameObject> mustDelete = new ArrayList<>();
+	  for (GameObject gameObject : gameObjects) {
+	    if (gameObject.getPosition().getX() < 0 || gameObject.getPosition().getY() < 0
+          || gameObject.getPosition().getX() > gameDevice.getBufferWidth()
+          || gameObject.getPosition().getY() > gameDevice.getBufferHeight()) {
+	      mustDelete.add(gameObject);
+      }
+    }
+    deleteObjects((mustDelete));
   }
 
   /**
