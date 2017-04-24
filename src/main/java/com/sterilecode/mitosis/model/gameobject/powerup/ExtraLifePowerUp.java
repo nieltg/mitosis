@@ -1,4 +1,4 @@
-package com.sterilecode.mitosis.model.gameobject.powerup.extralifepowerup;
+package com.sterilecode.mitosis.model.gameobject.powerup;
 
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.Behavior;

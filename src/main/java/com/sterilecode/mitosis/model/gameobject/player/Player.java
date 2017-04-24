@@ -5,6 +5,7 @@ import com.sterilecode.mitosis.model.event.ShootEvent;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -35,6 +36,11 @@ public class Player extends GameObject {
 	 * Default speed of the bullet that is shot by the player.
 	 */
 	private final int defaultBulletSpeed = 10;
+
+  /**
+   * Rotation speed
+   */
+	private final int rotationSpeed = 10;
 
 	/**
 	 * Player's current life.
@@ -128,4 +134,8 @@ public class Player extends GameObject {
    * @param deltaTime
    */
 	public void update(long deltaTime) {}
+
+	public void update(long deltaTime, boolean counterClockwise) {
+    rotate(rotationSpeed / size * deltaTime/NANOSECONDS_IN_A_SECOND);
+  }
 }

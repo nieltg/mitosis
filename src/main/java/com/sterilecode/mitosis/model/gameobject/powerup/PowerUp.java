@@ -39,6 +39,16 @@ public abstract class PowerUp extends GameObject {
 	  return behavior;
   }
 
+  /**
+   * update.
+   * Move power up according to it's behavior.s
+   *
+   * @param deltaTime
+   */
+  public final void update(long deltaTime) {
+    behavior.move(deltaTime);
+  }
+
 	/**
 	 * applyPowerUp.
 	 * An abstract method.
