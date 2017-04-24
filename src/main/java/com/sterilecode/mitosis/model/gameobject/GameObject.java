@@ -23,7 +23,7 @@ public abstract class GameObject extends Observable{
 	/**
 	 * Size of the object in integer.
 	 */
-	protected int size;
+	protected double size;
 
 	/**
 	 * An id used to represent certain view.
