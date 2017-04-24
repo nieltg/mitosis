@@ -13,8 +13,6 @@ package com.sterilecode.mitosis.view;
  * Last modified at  : 4/23/17
  */
 
-import com.sterilecode.mitosis.common.Vector;
-import com.sterilecode.mitosis.controller.GameDevice;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.view.ViewManager.ViewNotLoadedException;
 import java.awt.Color;

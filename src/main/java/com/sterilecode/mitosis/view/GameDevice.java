@@ -1,4 +1,4 @@
-package com.sterilecode.mitosis.controller;
+package com.sterilecode.mitosis.view;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -16,9 +16,14 @@ package com.sterilecode.mitosis.controller;
 import java.awt.image.BufferStrategy;
 
 public interface GameDevice {
+
+  // Display operations
   BufferStrategy getBufferStrategy();
   int getBufferWidth();
   int getBufferHeight();
   int getBufferX();
   int getBufferY();
+
+  // Input operations
+  InputState getInputState();
 }
