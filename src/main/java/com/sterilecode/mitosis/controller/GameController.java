@@ -1,11 +1,14 @@
 package com.sterilecode.mitosis.controller;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
+
 import com.sterilecode.mitosis.model.gameobject.GameObject;
-import com.sterilecode.mitosis.view.GameDevice;
-import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
+import com.sterilecode.mitosis.view.GameDevice;
+import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +35,6 @@ import static java.lang.Math.sqrt;
 
 public class GameController implements Runnable, Observer {
 
-  // TODO: move to common.constants
-  private final long NANOSECONDS_IN_A_SECOND = 1000000000;
-  private final long NANOSECONDS_IN_A_MILLISECOND = 1000000;
   private final long TARGET_FPS = 60;
   private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
 
@@ -73,7 +73,7 @@ public class GameController implements Runnable, Observer {
 
       processInput();
       updatePhysics(deltaTime);
-      collisionDetection();
+      detectCollision();
       spawnEnemies();
       spawnPowerUps();
       renderer.render(gameObjects);
@@ -172,13 +172,13 @@ public class GameController implements Runnable, Observer {
     for (Bullet bullet : bullets) {
     	for (GameObject enemyOrPowerUp : enemiesAndPowerUps) {
 				if (pow(bullet.getSize() - enemyOrPowerUp.getSize(), 2)
-						<= pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX, 2)
-						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY, 2)
-						&& pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX, 2)
-						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY, 2)
+						<= pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
+						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
+						&& pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
+						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
 			 			<= pow(bullet.getSize() + enemyOrPowerUp.getSize(), 2)) {
 					if (enemyOrPowerUp instanceof PowerUp) {
-						((PowerUp) enemyOrPowerUp).applyPowerUp(enemyOrPowerUp.getOwner());
+						((PowerUp) enemyOrPowerUp).applyPowerUp(bullet.getOwner());
 					}
 					mustDelete.add(enemyOrPowerUp);
 		    }

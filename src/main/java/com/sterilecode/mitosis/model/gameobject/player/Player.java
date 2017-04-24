@@ -117,7 +117,7 @@ public class Player extends GameObject {
 	 */
 	public void shoot(long currentTime) {
 		if (currentTime - lastShotTime > minimumTimeToShoot) {
-			notifyObservers(new ShootEvent(new Bullet(position, bulletVelocity)));
+			notifyObservers(new ShootEvent(new Bullet(position, bulletVelocity, this)));
 		}
 		lastShotTime = currentTime;
 	}
