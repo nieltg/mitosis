@@ -2,6 +2,8 @@ package com.sterilecode.mitosis.plugin;
 
 import com.sterilecode.mitosis.plugin.client.IPlugin;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.Attributes;
@@ -20,7 +22,11 @@ public class Plugin {
 
   private IPlugin pluginInstance;
 
-  public Plugin(ClassLoader loader) throws IOException, ClassNotFoundException {
+  public Plugin(URL url) throws IOException, PluginException {
+    this(new URLClassLoader(new URL[]{url}, Plugin.class.getClassLoader()));
+  }
+
+  public Plugin(ClassLoader loader) throws IOException, PluginException {
     // Keep class loader for class-loading.
     pluginClassLoader = loader;
 
@@ -30,10 +36,25 @@ public class Plugin {
     Attributes attributes = manifest.getMainAttributes();
 
     pluginName = attributes.getValue("Sterilecode-Mitosis-Plugin-Name");
+    if (pluginName == null) {
+      throw new PluginException("Malformed plugin: Plugin name is not specified");
+    }
+
     pluginVersion = attributes.getValue("Sterilecode-Mitosis-Plugin-Version");
+    if (pluginVersion == null) {
+      throw new PluginException("Malformed plugin: Plugin version is not specified");
+    }
 
     String className = attributes.getValue("Sterilecode-Mitosis-Plugin-Class");
-    pluginClass = pluginClassLoader.loadClass(className);
+    if (className == null) {
+      throw new PluginException("Malformed plugin: Plugin class-name is not specified");
+    }
+
+    try {
+      pluginClass = pluginClassLoader.loadClass(className);
+    } catch (ClassNotFoundException e) {
+      throw new PluginException("Malformed plugin: Specified class is not found", e);
+    }
   }
 
   public String getPluginName() {
