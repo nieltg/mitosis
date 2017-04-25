@@ -13,16 +13,16 @@ package com.sterilecode.mitosis;
  * Last modified at  : 4/24/17
  */
 
+import com.sterilecode.mitosis.common.Constants;
 import com.sterilecode.mitosis.controller.GameController;
 import com.sterilecode.mitosis.controller.ModelManager;
 import com.sterilecode.mitosis.plugin.ObjectManager;
 import com.sterilecode.mitosis.plugin.Plugin;
 import com.sterilecode.mitosis.plugin.PluginManager;
-import com.sterilecode.mitosis.view.GameDevice;
+import com.sterilecode.mitosis.plugin.client.RegistrationToken;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
 import com.sterilecode.mitosis.view.swing.MenuDialog;
-import java.io.IOException;
 
 public class Main {
 
@@ -65,6 +65,10 @@ public class Main {
 
       // Run GameController thread, then show it on the game frame.
       GameController gameController = new GameController(gameDevice, 2);
+
+      RegistrationToken registrationToken = ObjectManager.getInstance()
+          .registerObject(Constants.GAME_CONTROLLER_PROVIDER_ID, gameController);
+
       Thread gameControllerThread = new Thread(gameController);
       gameControllerThread.start();
       gameDevice.showFrame();
@@ -75,6 +79,8 @@ public class Main {
       } catch (InterruptedException exception) {
         System.exit(0);
       } finally {
+        registrationToken.unregister();
+
         gameDevice.hideFrame();
       }
     }
