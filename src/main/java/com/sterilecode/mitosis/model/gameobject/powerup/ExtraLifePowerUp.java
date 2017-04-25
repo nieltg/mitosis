@@ -1,4 +1,4 @@
-package com.sterilecode.mitosis.model.gameobject.powerup.extralifepowerup;
+package com.sterilecode.mitosis.model.gameobject.powerup;
 
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.Behavior;
@@ -18,10 +18,9 @@ public class ExtraLifePowerUp extends PowerUp {
 	 * Constructor.
 	 *
 	 * @param position
-	 * @param velocity
 	 */
-	public ExtraLifePowerUp(Vector position, Vector velocity) {
-		super(position, velocity, 10, "ExtraLifePowerUp");
+	public ExtraLifePowerUp(Vector position) {
+		super(position, new Vector(0, 20), 5, "ExtraLifePowerUp");
 		behavior = new StraightBehavior(this);
 	}
 

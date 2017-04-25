@@ -27,8 +27,27 @@ public abstract class PowerUp extends GameObject {
 	 * @param viewId
 	 */
 	public PowerUp(Vector position, Vector velocity, int size, String viewId) {
-		super(position, velocity, size, viewId);
+		super(position, 0.0, velocity, 0.0, size, viewId);
 	}
+
+  /**
+   * getBehavior.
+   *
+   * @return behavior
+   */
+	public Behavior getBehavior() {
+	  return behavior;
+  }
+
+  /**
+   * update.
+   * Move power up according to it's behavior.s
+   *
+   * @param deltaTime
+   */
+  public final void update(long deltaTime) {
+    behavior.move(deltaTime);
+  }
 
 	/**
 	 * applyPowerUp.

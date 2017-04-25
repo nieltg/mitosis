@@ -26,8 +26,27 @@ public abstract class Enemy extends GameObject{
 	 * @param viewId
 	 */
 	public Enemy(Vector position, Vector velocity, double size, String viewId) {
-		super(position, velocity, size, viewId);
+		super(position, 0.0, velocity, 0.0, size, viewId);
 	}
+
+  /**
+   * getBehavior
+   *
+   * @return behavior.
+   */
+	public Behavior getBehavior() {
+		return behavior;
+	}
+
+  /**
+   * update.
+   * Move enemy according to it's behavior.
+   *
+   * @param deltaTime
+   */
+	public final void update(long deltaTime) {
+	  behavior.move(deltaTime);
+  }
 
 	/**
 	 * split.
