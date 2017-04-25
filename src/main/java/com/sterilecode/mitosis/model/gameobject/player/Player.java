@@ -27,61 +27,25 @@ import static java.lang.Math.sin;
  * A class that is used to represent player.
  */
 public class Player extends GameObject {
-
-  /**
-   * Rotation speed
-   */
   public static final double MAX_ANGULAR_VELOCITY = 2.0;
-
-  /**
-   * Default life of the player.
-   */
-  private final int defaultLife = 3;
-
-  /**
-   * Default rotation of the player
-   */
-  private final double defaultRotation = 0;
-
-  /**
-   * Default minimum time required to shoot another bullet
-   */
-  private final long defaultMinimumTimeToShoot = NANOSECONDS_IN_A_MILLISECOND * 100;
-
-  /**
-   * Default speed of the bullet that is shot by the player.
-   */
-  private final int defaultBulletSpeed = 100;
-
-  /**
-   * Player's current life.
-   */
+  private static final int DEFAULT_LIFE = 3;
+  private static final double DEFAULT_ROTATION = 0;
+  private static final long DEFAULT_MINIMUM_TIME_TO_SHOOT = NANOSECONDS_IN_A_MILLISECOND * 100;
+  private static final int DEFAULT_BULLET_SPEED = 100;
   private int life;
-
-  /**
-   * Player's current minimum time required to shoot another bullet.
-   */
-  private long minimumTimeToShoot;
-
-  /**
-   * Last time the player shoot.
-   */
   private long lastShotTime;
-
-  /**
-   * Current speed of the bullet that is shot by the player.
-   */
   private int bulletSpeed;
+  private long minimumTimeToShoot;
 
   /**
    * Constructor.
    */
   public Player(Vector position) {
     super(position, -Math.PI / 2.0, new Vector(), 0.0, 24, "Player");
-    life = defaultLife;
-    minimumTimeToShoot = defaultMinimumTimeToShoot;
+    life = DEFAULT_LIFE;
+    minimumTimeToShoot = DEFAULT_MINIMUM_TIME_TO_SHOOT;
     lastShotTime = 0;
-    bulletSpeed = defaultBulletSpeed;
+    bulletSpeed = DEFAULT_BULLET_SPEED;
   }
 
   /**
@@ -123,6 +87,12 @@ public class Player extends GameObject {
     }
   }
 
+  /**
+   * update.
+   * Change angular velocity
+   *
+   * @param deltaTime
+   */
   public void update(long deltaTime) {
     rotation += angularVelocity * deltaTime / (double) NANOSECONDS_IN_A_SECOND;
   }

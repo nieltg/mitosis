@@ -18,29 +18,11 @@ import java.util.Observable;/*
  * An abstract class that is the super class of all objects in the game.
  */
 public abstract class GameObject extends Observable {
-
-  /**
-   * Position of the object in 2D vector.
-   */
   protected Vector position;
-
   protected double rotation;
-
-  /**
-   * Velocity of the object in 2D vector.
-   */
   protected Vector velocity;
-
   protected double angularVelocity;
-
-  /**
-   * Size of the object in integer.
-   */
   protected double size;
-
-  /**
-   * An id used to represent certain view.
-   */
   protected String viewId;
 
   /**

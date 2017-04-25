@@ -2,19 +2,23 @@ package com.sterilecode.mitosis.model.gameobject.enemy;
 
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.Behavior;
-import com.sterilecode.mitosis.model.gameobject.GameObject;
-
-/**
- * Created by Reinaldo on 4/22/2017.
+import com.sterilecode.mitosis.model.gameobject.GameObject;/*
+ * Mitosis - IF2210 Object-oriented Programming
+ * Group 1 - SterileCode
+ * - 13515001 [K-01] Jonathan Christopher
+ * - 13515002 [K-02] Wenny Yustalim
+ * - 13515071 [K-02] Daniel Pintara
+ * - 13515093 [K-03] Reinaldo Ignatius
+ * ***
+ * File name         : Enemy.java
+ * Created at        : 4/22/2017
+ * Last modified at  : 4/22/2017
  */
 
 /**
  * An abstract class that is used to represent enemy.
  */
 public abstract class Enemy extends GameObject{
-	/**
-	 * The behavior of the enemy.
-	 */
 	protected Behavior behavior;
 
 	/**

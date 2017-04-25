@@ -23,10 +23,6 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
  * A class that is used to represent a bullet.
  */
 public class Bullet extends GameObject {
-
-  /**
-   * Owner of the bullet.
-   */
   private Player owner;
 
   /**
