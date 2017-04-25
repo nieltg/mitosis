@@ -31,11 +31,11 @@ public class ObjectManager implements IPluginRegistry {
 
   @Override
   public void addRegistryListener(String serviceId, RegistryListener listener) {
-    // TODO: RegistryListener
+    PluginRegistry.getInstance().addRegistryListener(serviceId, listener);
   }
 
   @Override
   public void removeRegistryListener(String serviceId, RegistryListener listener) {
-    // TODO: RegistryListener
+    PluginRegistry.getInstance().removeRegistryListener(serviceId, listener);
   }
 }
