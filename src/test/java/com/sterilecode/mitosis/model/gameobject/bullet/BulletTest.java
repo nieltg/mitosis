@@ -3,6 +3,7 @@ package com.sterilecode.mitosis.model.gameobject.bullet;
 import static org.junit.Assert.*;
 
 import com.sterilecode.mitosis.common.Vector;
+import com.sterilecode.mitosis.model.gameobject.player.Player;
 import org.junit.Test;
 
 /**
@@ -11,7 +12,9 @@ import org.junit.Test;
 public class BulletTest {
   Vector v1 = new Vector(1,2);
   Vector v2 = new Vector(3,4);
-  Bullet b = new Bullet(v1, v2);
+  Vector v3 = new Vector(5,6);
+  Player p = new Player(v3);
+  Bullet b = new Bullet(v1, v2, p);
   private static final double EPS = 1e-9;
 
   @Test
@@ -22,8 +25,8 @@ public class BulletTest {
 
   @Test
   public void getVelocity() throws Exception {
-    assertEquals(3, (b.getPosition()).getX(), EPS);
-    assertEquals(4, (b.getPosition()).getY(), EPS);
+    assertEquals(1, (b.getPosition()).getX(), EPS);
+    assertEquals(2, (b.getPosition()).getY(), EPS);
   }
 
   @Test
