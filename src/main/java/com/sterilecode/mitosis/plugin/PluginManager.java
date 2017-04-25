@@ -7,7 +7,8 @@ import java.util.List;
 
 public class PluginManager {
 
-  public static final String PLUGINS_DIR = "plugins";
+  // TODO: Development environment!
+  public static final String PLUGINS_DIR = "build/plugins";
 
   private static final PluginManager pluginManagerInstance = new PluginManager();
 

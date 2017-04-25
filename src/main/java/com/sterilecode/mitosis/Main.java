@@ -16,6 +16,8 @@ package com.sterilecode.mitosis;
 import com.sterilecode.mitosis.controller.GameController;
 import com.sterilecode.mitosis.controller.ModelManager;
 import com.sterilecode.mitosis.plugin.ObjectManager;
+import com.sterilecode.mitosis.plugin.Plugin;
+import com.sterilecode.mitosis.plugin.PluginManager;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
@@ -29,9 +31,24 @@ public class Main {
    */
   public static void main(String[] args) {
     // Load local models
-    ModelManager.getInstance().loadLocalEnemies();
-    ModelManager.getInstance().loadLocalBehavior();
-    ModelManager.getInstance().loadLocalPowerUp();
+    ModelManager modelManager = ModelManager.getInstance();
+    modelManager.loadLocalEnemies();
+    modelManager.loadLocalBehavior();
+    modelManager.loadLocalPowerUp();
+
+    // Load plugins
+    PluginManager pluginManager = PluginManager.getInstance();
+    pluginManager.discoverPluginsInDefaultDirectory();
+
+    System.out.println("DEBUG: Discovering plugins... ");
+
+    for (Plugin plugin : pluginManager.getPlugins()) {
+      System.out.println("DEBUG: Plugin: " + plugin.getPluginName() + " " + plugin.getPluginVersion());
+      try {
+        plugin.activate();
+      } catch (Exception e) {
+      }
+    }
 
     // Load and cache views
     try {
