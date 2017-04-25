@@ -1,28 +1,65 @@
 package com.sterilecode.mitosis.view;
 
+import com.sterilecode.mitosis.common.Constants;
+import com.sterilecode.mitosis.plugin.ObjectManager;
+import com.sterilecode.mitosis.plugin.client.RegistryListener;
+import com.sterilecode.mitosis.view.provider.LocalViewProvider;
+import com.sterilecode.mitosis.view.provider.ViewProvider;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
+import java.util.Stack;
+import javax.swing.text.View;
 
 /**
  * A singleton for caching and retrieving views (game object images).
  */
 public class ViewManager {
 
-  private static final String VIEW_DIRECTORY = "views";
-  private static ViewManager viewManagerInstance = new ViewManager();
-  private final Map<String, Image> views = new HashMap<>();
+  private static final ViewManager viewManagerInstance = new ViewManager();
+
+  private final Map<String, Stack<ViewProvider>> providerMap = new HashMap<>();
+
+  private final RegistryListener registryListener = new RegistryListener() {
+    @Override
+    public void registryObjectAdded(String serviceId, Object obj) {
+      try {
+        ViewProvider viewProvider = (ViewProvider) obj;
+        String providerNamespace = viewProvider.getNamespace();
+        viewProvider.loadViews();
+
+        Stack<ViewProvider> providerStack = providerMap.get(providerNamespace);
+
+        if(providerStack == null) {
+          providerStack = new Stack<>();
+          providerMap.put(providerNamespace, providerStack);
+        }
+
+        providerStack.push(viewProvider);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    @Override
+    public void registryObjectRemoved(String serviceId, Object obj) {
+      ViewProvider viewProvider = (ViewProvider) obj;
+      String providerNamespace = viewProvider.getNamespace();
+
+      Stack<ViewProvider> providerStack = providerMap.get(providerNamespace);
+
+      if(providerStack != null) {
+        providerStack.remove(viewProvider);
+
+        if(providerStack.isEmpty())
+          providerMap.remove(providerNamespace);
+      }
+    }
+  };
 
   public class ViewNotLoadedException extends Exception {
+
     public ViewNotLoadedException(String viewId) {
       super("View with ID " + viewId + " not yet loaded.");
     }
@@ -32,51 +69,56 @@ public class ViewManager {
     // Prevent class instantiation as this is a singleton
   }
 
-  /**
-   * Loads views (images) from the view directory and stores it in the view manager cache.
-   * @throws IOException
-   */
-  public void loadViews() throws IOException {
-    views.clear();
+  public void initialize() {
+    ObjectManager objManager = ObjectManager.getInstance();
 
-    // Get list of view files
-    List<File> files = new ArrayList<>();
-    URL url = getClass().getClassLoader().getResource(VIEW_DIRECTORY);
-    try {
-      File urlFile = new File(url.toURI());
-      if (urlFile.isDirectory()) {
-        for (File file : urlFile.listFiles()) {
-          files.add(file);
-        }
-      }
-    } catch (URISyntaxException exception) {
-      throw new IOException("Invalid URI");
-    }
-
-    // Load views from the files
-    for (File file : files) {
-      String viewId = file.getName().replaceFirst("[.][^.]+$", "");
-      BufferedImage image = ImageIO.read(file);
-      views.put(viewId, image);
-    }
+    objManager.addRegistryListener(Constants.VIEW_PROVIDER_SERVICE_ID, registryListener);
+    objManager.registerObject(Constants.VIEW_PROVIDER_SERVICE_ID, LocalViewProvider.getInstance());
   }
 
   /**
    * Get a game object view (image) from cache.
+   *
    * @param viewId Game object view identifier.
    * @return A view corresponding to the viewId.
    */
   public Image getView(String viewId) throws ViewNotLoadedException {
-    Image view = views.get(viewId);
-    if (view == null) {
-      throw new ViewNotLoadedException(viewId);
+    String namespace, locViewId;
+    int separatorIndex = viewId.indexOf('@');
+
+    if (separatorIndex == -1) {
+      locViewId = viewId;
+      namespace = LocalViewProvider.PROVIDER_NAMESPACE;
     } else {
-      return view;
+      locViewId = viewId.substring(0, separatorIndex);
+      namespace = viewId.substring(separatorIndex + 1);
     }
+
+    Stack<ViewProvider> providerStack = providerMap.get(namespace);
+
+    if(providerStack == null) {
+      throw new ViewNotLoadedException("Namespace is not found");
+    }
+
+    ViewProvider viewProvider = providerStack.peek();
+
+    if(viewProvider == null) {
+      // Should not be happened anyway.
+      throw new ViewNotLoadedException("Provider is not found");
+    }
+
+    Image viewImage = viewProvider.getView(locViewId);
+
+    if(viewImage == null) {
+      throw new ViewNotLoadedException("View is not found in specified namespace");
+    }
+
+    return viewImage;
   }
 
   /**
    * Get an instance of ViewManager.
+   *
    * @return An instance of ViewManager.
    */
   public static ViewManager getInstance() {
