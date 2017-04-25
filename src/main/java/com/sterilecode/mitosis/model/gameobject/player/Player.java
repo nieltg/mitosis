@@ -98,6 +98,10 @@ public class Player extends GameObject {
     life -= decrement;
   }
 
+  public int getLife() {
+    return life;
+  }
+
   /**
    * shoot.
    */
