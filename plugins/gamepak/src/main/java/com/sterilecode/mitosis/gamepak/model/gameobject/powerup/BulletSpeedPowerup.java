@@ -5,13 +5,9 @@ import com.sterilecode.mitosis.model.behavior.straightbehavior.StraightBehavior;
 import com.sterilecode.mitosis.model.gameobject.player.Player;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
 
-/**
- * Created by nieltg on 4/25/2017.
- */
-
 public class BulletSpeedPowerup extends PowerUp {
   public BulletSpeedPowerup(Vector position) {
-    super(position, new Vector(0, 20), 5, "BulletSpeedPowerUp");
+    super(position, new Vector(0, 20), 5, "BulletSpeedPowerUp@GamePak");
     behavior = new StraightBehavior(this);
   }
 
