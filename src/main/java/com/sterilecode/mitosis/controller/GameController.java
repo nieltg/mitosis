@@ -13,10 +13,12 @@ import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 import com.sterilecode.mitosis.model.gameobject.player.Player;
 import com.sterilecode.mitosis.model.gameobject.powerup.ExtraLifePowerUp;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
+import com.sterilecode.mitosis.plugin.ObjectManager;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -243,17 +245,16 @@ public class GameController implements Runnable, Observer {
   private void spawnEnemies() {
     if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_MILLISECOND * 500) {
       timeSinceLastEnemySpawn = currentTime;
-      List<Class<? extends Enemy>> enemyClasses = new ArrayList<>();
-      int classCount = 0;
-      enemyClasses.add(Bacteria.class);
-      ++classCount;
+      List<Class<? extends Enemy>> enemyClasses = ModelManager.getInstance().getListOfEnemy();
       Random random = new Random(System.currentTimeMillis());
-      Enemy newEnemy;
-      switch(random.nextInt(classCount)) {
-        case 0:
-          newEnemy = new Bacteria(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
-          newEnemy.addObserver(this);
-          gameObjects.add(newEnemy);
+      try {
+        Enemy newEnemy = enemyClasses.get(random.nextInt(enemyClasses.size())).getConstructor(Vector.class)
+                         .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
+        newEnemy.addObserver(this);
+        gameObjects.add(newEnemy);
+      } catch(Exception exception) {
+        System.out.println(exception.getMessage());
+        exception.printStackTrace();
       }
     }
   }
@@ -264,14 +265,16 @@ public class GameController implements Runnable, Observer {
   private void spawnPowerUps() {
     if (currentTime - timeSinceLastPowerUpSpawn > NANOSECONDS_IN_A_MILLISECOND * 5000) {
       timeSinceLastPowerUpSpawn = currentTime;
-      List<Class<? extends PowerUp>> powerUpClasses = new ArrayList<>();
-      int classCount = 0;
-      powerUpClasses.add(ExtraLifePowerUp.class);
-      ++classCount;
+      List<Class<? extends PowerUp>> powerUpClasses = ModelManager.getInstance().getListOfPowerUp();
       Random random = new Random(System.currentTimeMillis());
-      switch(random.nextInt(classCount)) {
-        case 0:
-          gameObjects.add(new ExtraLifePowerUp(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+      try {
+        PowerUp newPowerUp = powerUpClasses.get(random.nextInt(powerUpClasses.size())).getConstructor(Vector.class)
+                             .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
+        newPowerUp.addObserver(this);
+        gameObjects.add(newPowerUp);
+      } catch(Exception exception) {
+        System.out.println(exception.getMessage());
+        exception.printStackTrace();
       }
     }
   }

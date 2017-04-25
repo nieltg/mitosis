@@ -14,6 +14,8 @@ package com.sterilecode.mitosis;
  */
 
 import com.sterilecode.mitosis.controller.GameController;
+import com.sterilecode.mitosis.controller.ModelManager;
+import com.sterilecode.mitosis.plugin.ObjectManager;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
@@ -26,6 +28,10 @@ public class Main {
    * @param args Command-line arguments for this program.
    */
   public static void main(String[] args) {
+    // Load local models
+    ModelManager.getInstance().loadLocalEnemies();
+    ModelManager.getInstance().loadLocalBehavior();
+    ModelManager.getInstance().loadLocalPowerUp();
 
     // Load and cache views
     try {
