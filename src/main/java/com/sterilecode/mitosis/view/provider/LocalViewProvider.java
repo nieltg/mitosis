@@ -58,8 +58,6 @@ public class LocalViewProvider implements ViewProvider {
         try {
           BufferedImage image = ImageIO.read(Files.newInputStream(path));
           views.put(viewId, image);
-
-          System.out.println("DEBUG: PluginViewProvider: " + viewId);
         } catch (IOException e) {
           e.printStackTrace();
         }
