@@ -28,7 +28,7 @@ public class ExtraLifePowerUp extends PowerUp {
 	 * @param position
 	 */
 	public ExtraLifePowerUp(Vector position) {
-		super(position, new Vector(0, 20), 5, "ExtraLifePowerUp");
+		super(position, new Vector(0, 40), 5, "ExtraLifePowerUp");
 		behavior = new StraightBehavior(this);
 	}
 

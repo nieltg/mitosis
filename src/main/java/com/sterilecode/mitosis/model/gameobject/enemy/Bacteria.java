@@ -26,7 +26,7 @@ public class Bacteria extends Enemy {
    * Constructor.
    */
   public Bacteria(Vector position) {
-    super(position, new Vector(0, 10), 5, "Bacteria");
+    super(position, new Vector(0, 20), 5, "Bacteria");
     behavior = new StraightBehavior(this);
   }
 

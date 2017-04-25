@@ -81,6 +81,7 @@ public class GameController implements Runnable, Observer {
       long newTime = System.nanoTime();
       long deltaTime = newTime - currentTime;
       currentTime = newTime;
+
       fps = (double) NANOSECONDS_IN_A_SECOND / (double) deltaTime;
 
       processInput();
@@ -138,7 +139,7 @@ public class GameController implements Runnable, Observer {
     for (int i = 0; i < playerCount; i++) {
       int centerX = gameDevice.getBufferWidth() / 2;
       int centerY = gameDevice.getBufferHeight() / 2;
-      final int playerSpacing = 100;
+      final int playerSpacing = 300;
       int offsetX = - (playerCount - 1) * playerSpacing / 2 + i * playerSpacing;
       Player player = new Player(new Vector(centerX + offsetX, centerY));
       player.addObserver(this);

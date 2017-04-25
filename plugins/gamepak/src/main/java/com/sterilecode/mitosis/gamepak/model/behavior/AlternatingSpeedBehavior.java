@@ -20,17 +20,30 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
  * Last modified at  : 4/25/2017
  */
 
+/**
+ * A behavior that alternates it's owner velocity in certain period.
+ */
 public class AlternatingSpeedBehavior extends Behavior{
   private long lastTimeAlternating = 0;
   private long elatedTime;
   private boolean slowDown;
 
+  /**
+   * Constructor
+   *
+   * @param owner
+   */
   public AlternatingSpeedBehavior(GameObject owner) {
     super(owner);
     elatedTime = 0;
     slowDown = false;
   }
 
+  /**
+   * Moves owner according to current state (slow down or not).
+   *
+   * @param deltaTime in nanoseconds.
+   */
   public void move(long deltaTime) {
     if (elatedTime > NANOSECONDS_IN_A_SECOND * 2) {
       if (!slowDown) {
