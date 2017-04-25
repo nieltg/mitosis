@@ -17,9 +17,9 @@ import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.behavior.straightbehavior.StraightBehavior;
 import com.sterilecode.mitosis.model.gameobject.enemy.Bacteria;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
+import com.sterilecode.mitosis.model.gameobject.powerup.ExtraLifePowerUp;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
 import com.sterilecode.mitosis.plugin.ObjectManager;
-import com.sterilecode.mitosis.plugin.ObjectSupplier;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +48,7 @@ public class ModelManager {
   }
 
   public void loadLocalPowerUp() {
-    ObjectManager.getInstance().registerObject(POWER_UP_SERVICE_ID, PowerUp.class);
+    ObjectManager.getInstance().registerObject(POWER_UP_SERVICE_ID, ExtraLifePowerUp.class);
   }
 
   public List<Class<? extends Enemy>> getListOfEnemy() {

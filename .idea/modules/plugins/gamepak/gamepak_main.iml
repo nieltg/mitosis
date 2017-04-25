@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":plugins:gamepak:main" external.linked.project.path="$MODULE_DIR$/../../../../plugins/gamepak" external.root.project.path="$MODULE_DIR$/../../../.." external.system.id="GRADLE" external.system.module.group="com.sterilecode.mitosis.plugins" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/../../../../plugins/gamepak/build/classes/main" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../plugins/gamepak/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../plugins/gamepak/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../plugins/gamepak/src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="com.sterilecode.mitosis_main" scope="PROVIDED" />
+  </component>
+</module>
