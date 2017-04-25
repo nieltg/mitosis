@@ -2,7 +2,6 @@ package com.sterilecode.mitosis.model.behavior.straightbehavior;
 
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
-import com.sterilecode.mitosis.common.Constants;
 import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.gameobject.GameObject;/*
  * Mitosis - IF2210 Object-oriented Programming

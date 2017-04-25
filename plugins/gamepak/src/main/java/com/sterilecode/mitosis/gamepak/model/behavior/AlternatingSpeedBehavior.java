@@ -27,6 +27,7 @@ public class AlternatingSpeedBehavior extends Behavior{
   }
 
   public void move(long deltaTime) {
+    // TODO change to alternating speed
     owner.setPosition(owner.getPosition()
         .add(owner.getVelocity().multiply(deltaTime / (double) NANOSECONDS_IN_A_SECOND)));
   }
