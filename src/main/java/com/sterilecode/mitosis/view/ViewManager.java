@@ -60,8 +60,8 @@ public class ViewManager {
 
   public class ViewNotLoadedException extends Exception {
 
-    public ViewNotLoadedException(String viewId) {
-      super("View with ID " + viewId + " not yet loaded.");
+    public ViewNotLoadedException(String msg) {
+      super(msg);
     }
   }
 
@@ -71,6 +71,9 @@ public class ViewManager {
 
   public void initialize() {
     ObjectManager objManager = ObjectManager.getInstance();
+
+    objManager.getObjects(Constants.VIEW_PROVIDER_SERVICE_ID).forEach(obj ->
+        registryListener.registryObjectAdded(Constants.VIEW_PROVIDER_SERVICE_ID, obj));
 
     objManager.addRegistryListener(Constants.VIEW_PROVIDER_SERVICE_ID, registryListener);
     objManager.registerObject(Constants.VIEW_PROVIDER_SERVICE_ID, LocalViewProvider.getInstance());
@@ -110,7 +113,7 @@ public class ViewManager {
     Image viewImage = viewProvider.getView(locViewId);
 
     if(viewImage == null) {
-      throw new ViewNotLoadedException("View is not found in specified namespace");
+      throw new ViewNotLoadedException("View " + locViewId + " is missing in specified namespace");
     }
 
     return viewImage;

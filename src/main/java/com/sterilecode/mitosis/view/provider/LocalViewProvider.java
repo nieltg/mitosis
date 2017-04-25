@@ -2,13 +2,16 @@ package com.sterilecode.mitosis.view.provider;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
 
@@ -38,25 +41,32 @@ public class LocalViewProvider implements ViewProvider {
   public void loadViews() throws IOException {
     views.clear();
 
-    // Get list of view files
-    List<File> files = new ArrayList<>();
-    URL url = getClass().getClassLoader().getResource(VIEW_DIRECTORY);
     try {
-      File urlFile = new File(url.toURI());
-      if (urlFile.isDirectory()) {
-        for (File file : urlFile.listFiles()) {
-          files.add(file);
-        }
-      }
-    } catch (URISyntaxException exception) {
-      throw new IOException("Invalid URI");
-    }
+      URI uri = getClass().getClassLoader().getResource(VIEW_DIRECTORY).toURI();
+      Path walkPath;
 
-    // Load views from the files
-    for (File file : files) {
-      String viewId = file.getName().replaceFirst("[.][^.]+$", "");
-      BufferedImage image = ImageIO.read(file);
-      views.put(viewId, image);
+      if (uri.getScheme().equals("jar")) {
+        FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
+        walkPath = fileSystem.getPath(VIEW_DIRECTORY);
+      } else {
+        walkPath = Paths.get(uri);
+      }
+
+      Files.list(walkPath).forEach(path -> {
+        String viewId = path.getFileName().toString().replaceFirst("[.][^.]+$", "");
+
+        try {
+          BufferedImage image = ImageIO.read(Files.newInputStream(path));
+          views.put(viewId, image);
+
+          System.out.println("DEBUG: PluginViewProvider: " + viewId);
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      });
+
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
     }
   }
 
