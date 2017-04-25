@@ -23,6 +23,7 @@ import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;/*
  */
 public class ExtraLifePowerUp extends PowerUp {
 	/**
+   *
 	 * Constructor.
 	 *
 	 * @param position
@@ -38,6 +39,7 @@ public class ExtraLifePowerUp extends PowerUp {
 	 * @param player
 	 */
 	public void applyPowerUp(Player player) {
-		notifyObservers(new LifeChangeEvent(1));
+	  this.setChanged();
+	  notifyObservers(new LifeChangeEvent(1));
 	}
 }

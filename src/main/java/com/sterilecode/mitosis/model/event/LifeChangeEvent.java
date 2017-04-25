@@ -16,11 +16,22 @@ package com.sterilecode.mitosis.model.event;
 public class LifeChangeEvent {
   private int lifeChange;
 
+  /**
+   * Constructor.
+   *
+   * @param lifeChange
+   */
   public LifeChangeEvent(int lifeChange) {
     this.lifeChange = lifeChange;
   }
 
+  /**
+   * getLifeChange.
+   *
+   * @return int
+   */
   public int getLifeChange() {
+    System.out.println("BBBBB");
     return lifeChange;
   }
 }
