@@ -11,7 +11,7 @@ import java.util.jar.Manifest;
 
 public class Plugin {
 
-  private final List<DisposalListener> disposalListeners = new ArrayList<>();
+  private final List<PluginDisposalListener> disposalListeners = new ArrayList<>();
 
   private final ClassLoader pluginClassLoader;
 
@@ -91,16 +91,11 @@ public class Plugin {
     pluginInstance = null;
   }
 
-  public void addDisposalListener(DisposalListener listener) {
+  public void addDisposalListener(PluginDisposalListener listener) {
     disposalListeners.add(listener);
   }
 
-  public void removeDisposalListener(DisposalListener listener) {
+  public void removeDisposalListener(PluginDisposalListener listener) {
     disposalListeners.remove(listener);
-  }
-
-  public interface DisposalListener {
-
-    void pluginDisposed(Plugin source);
   }
 }
