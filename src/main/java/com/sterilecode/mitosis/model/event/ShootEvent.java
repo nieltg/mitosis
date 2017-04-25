@@ -19,7 +19,6 @@ import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
  * A class that is thrown if the Player.shoot() method is invoked
  */
 public class ShootEvent {
-
   /**
    * Bullet that is shot by the Player.
    */

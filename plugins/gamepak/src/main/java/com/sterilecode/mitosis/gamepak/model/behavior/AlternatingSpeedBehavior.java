@@ -4,6 +4,7 @@ import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.common.Vector;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 /*
@@ -21,14 +22,28 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 public class AlternatingSpeedBehavior extends Behavior{
   private long lastTimeAlternating = 0;
+  private long elatedTime;
+  private boolean slowDown;
 
   public AlternatingSpeedBehavior(GameObject owner) {
     super(owner);
+    elatedTime = 0;
+    slowDown = false;
   }
 
   public void move(long deltaTime) {
-    // TODO change to alternating speed
+    if (elatedTime > NANOSECONDS_IN_A_SECOND * 2) {
+      if (!slowDown) {
+        slowDown = true;
+        owner.setVelocity(owner.getVelocity().multiply(0.1));
+      } else {
+        slowDown = false;
+        owner.setVelocity(owner.getVelocity().multiply(10));
+      }
+      elatedTime -= NANOSECONDS_IN_A_SECOND * 3;
+    }
     owner.setPosition(owner.getPosition()
         .add(owner.getVelocity().multiply(deltaTime / (double) NANOSECONDS_IN_A_SECOND)));
+    elatedTime += deltaTime;
   }
 }

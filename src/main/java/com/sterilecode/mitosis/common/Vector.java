@@ -1,24 +1,24 @@
 package com.sterilecode.mitosis.common;
 
 import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-
-/**
- * Created by Reinaldo on 4/22/2017.
+import static java.lang.Math.sin;/*
+ * Mitosis - IF2210 Object-oriented Programming
+ * Group 1 - SterileCode
+ * - 13515001 [K-01] Jonathan Christopher
+ * - 13515002 [K-02] Wenny Yustalim
+ * - 13515071 [K-02] Daniel Pintara
+ * - 13515093 [K-03] Reinaldo Ignatius
+ * ***
+ * File name         : Vector.java
+ * Created at        : 4/22/2017
+ * Last modified at  : 4/22/2017
  */
 
 /**
  * A class that represent a 2D vector.
  */
 public class Vector {
-	/**
-	 * X component of the vector.
-	 */
 	private double x;
-
-	/**
-	 * Y component of the vector.
-	 */
 	private double y;
 
 	/**
