@@ -13,12 +13,15 @@ package com.sterilecode.mitosis.controller;
  * Last modified at  : 4/25/2017
  */
 
+import java.util.prefs.Preferences;
+
 public class HighScoreController {
   private HighScoreController highScoreControllerInstance = new HighScoreController();
-  private int highScore;
+  private Preferences highScoreMemo;
+  private Integer highScore;
 
   private HighScoreController() {
-    // Singleton
+    highScoreMemo = Preferences.userRoot().node("com/sterilecode/mitosis");
   }
 
   public int getHighScore() {
@@ -32,10 +35,10 @@ public class HighScoreController {
   }
 
   public void saveHighScore() {
-    //TODO
+    highScoreMemo.put("highscore", highScore.toString());
   }
 
   public void loadHighScore() {
-    //TODO
+    highScore = Integer.parseInt(highScoreMemo.get("highscore", "0"));
   }
 }
