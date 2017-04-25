@@ -49,24 +49,6 @@ public class Player extends GameObject {
   }
 
   /**
-   * increaseLife.
-   *
-   * @param increment
-   */
-  public void increaseLife(int increment) {
-    life += increment;
-  }
-
-  /**
-   * decreaseLife.
-   *
-   * @param decrement
-   */
-  public void decreaseLife(int decrement) {
-    life -= decrement;
-  }
-
-  /**
    * increaseBulletSpeed
    *
    * @param increment

@@ -3,6 +3,7 @@ package com.sterilecode.mitosis.model.gameobject.powerup;
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.behavior.straightbehavior.StraightBehavior;
+import com.sterilecode.mitosis.model.event.LifeChangeEvent;
 import com.sterilecode.mitosis.model.gameobject.player.Player;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;/*
  * Mitosis - IF2210 Object-oriented Programming
@@ -37,6 +38,6 @@ public class ExtraLifePowerUp extends PowerUp {
 	 * @param player
 	 */
 	public void applyPowerUp(Player player) {
-		player.increaseLife(1);
+		notifyObservers(new LifeChangeEvent(1));
 	}
 }

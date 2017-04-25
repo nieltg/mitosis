@@ -41,6 +41,7 @@ public class GameController implements Runnable, Observer {
 
   private final long TARGET_FPS = 60;
   private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
+  private final int INITIAL_HEALTH = 3;
 
   private GameDevice gameDevice;
   private Renderer renderer;
@@ -52,14 +53,18 @@ public class GameController implements Runnable, Observer {
   private List<Player> players;
   private long timeSinceLastEnemySpawn;
   private long timeSinceLastPowerUpSpawn;
+  private int life;
 
   /**
    * Creates a new GameController, ready to run.
    * @param gameDevice An object which provides game IO and display.
+   * @param playerCount Number of players for this game (1 or 2 players only).
    */
   public GameController(GameDevice gameDevice, int playerCount) {
+    assert playerCount > 0 && playerCount <= 2 : "Game currently only supports 1 or 2 players";
     this.gameDevice = gameDevice;
     renderer = new Renderer(gameDevice);
+    System.out.println("Initializing game...");
     initializeGame(playerCount);
   }
 
@@ -68,6 +73,8 @@ public class GameController implements Runnable, Observer {
    */
   @Override
   public void run() {
+
+    System.out.println("Starting game loop...");
 
     // The game loop - variable delta time
     while (isGameRunning) {
@@ -79,11 +86,11 @@ public class GameController implements Runnable, Observer {
       processInput();
       updatePhysics(deltaTime);
       detectCollision();
+      detectReachedBottom();
       detectOutOfBound();
       spawnEnemies();
       spawnPowerUps();
-      renderer.render(gameObjects);
-      //renderer.renderDebugInfo(fps, inputStatus);
+      renderer.render(gameObjects, life, score);
 
       // If we are going faster than the ideal delta time, we can wait
       long extraTime = TARGET_DELTA_TIME - (System.nanoTime() - currentTime);
@@ -139,6 +146,7 @@ public class GameController implements Runnable, Observer {
       players.add(player);
     }
 
+    life = INITIAL_HEALTH;
     score = 0;
     fps = 0.0;
     currentTime = System.nanoTime();
@@ -155,18 +163,34 @@ public class GameController implements Runnable, Observer {
   private void processInput() {
     InputState inputState = gameDevice.getInputState().clone();
 
-    // TODO
+    // TODO: menu key
 
-    if (inputState.isPlayer1RotateLeftKeyPressed()) {
-      players.get(0).setAngularVelocity(-Player.MAX_ANGULAR_VELOCITY);
-    } else if (inputState.isPlayer1RotateRightKeyPressed()) {
-      players.get(0).setAngularVelocity(Player.MAX_ANGULAR_VELOCITY);
-    } else {
-      players.get(0).setAngularVelocity(0.0);
+    // Player 1 input
+    if (players.size() >= 1) {
+      if (inputState.isPlayer1RotateLeftKeyPressed()) {
+        players.get(0).setAngularVelocity(-Player.MAX_ANGULAR_VELOCITY);
+      } else if (inputState.isPlayer1RotateRightKeyPressed()) {
+        players.get(0).setAngularVelocity(Player.MAX_ANGULAR_VELOCITY);
+      } else {
+        players.get(0).setAngularVelocity(0.0);
+      }
+      if (inputState.isPlayer1ShootKeyPressed()) {
+        players.get(0).shoot(currentTime);
+      }
     }
 
-    if (inputState.isPlayer1ShootKeyPressed()) {
-      players.get(0).shoot(currentTime);
+    // Player 2 input
+    if (players.size() >= 2) {
+      if (inputState.isPlayer2RotateLeftKeyPressed()) {
+        players.get(1).setAngularVelocity(-Player.MAX_ANGULAR_VELOCITY);
+      } else if (inputState.isPlayer2RotateRightKeyPressed()) {
+        players.get(1).setAngularVelocity(Player.MAX_ANGULAR_VELOCITY);
+      } else {
+        players.get(1).setAngularVelocity(0.0);
+      }
+      if (inputState.isPlayer2ShootKeyPressed()) {
+        players.get(1).shoot(currentTime);
+      }
     }
 
   }
@@ -217,9 +241,23 @@ public class GameController implements Runnable, Observer {
 					if (enemyOrPowerUp instanceof PowerUp) {
 						((PowerUp) enemyOrPowerUp).applyPowerUp(bullet.getOwner());
 					}
+					++score;
 					mustDelete.add(enemyOrPowerUp);
 		    }
 	    }
+    }
+    deleteObjects(mustDelete);
+  }
+
+  private void detectReachedBottom() {
+    List<Enemy> enemies = gameObjects.stream().filter(x ->x instanceof Enemy).map(y -> (Enemy) y)
+                          .collect(Collectors.toList());
+    List<GameObject> mustDelete = new ArrayList<>();
+    for (Enemy enemy : enemies) {
+      if (enemy.getPosition().getY() > gameDevice.getBufferHeight()) {
+        --life;
+        mustDelete.add(enemy);
+      }
     }
     deleteObjects(mustDelete);
   }

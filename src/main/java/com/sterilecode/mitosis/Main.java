@@ -59,7 +59,7 @@ public class Main {
     // TODO: show main menu
 
     // DEVELOPMENT: run GameController thread and wait for it to end
-    GameController gameController = new GameController(gameDevice, 1);
+    GameController gameController = new GameController(gameDevice, 2);
     Thread gameControllerThread = new Thread(gameController);
     gameControllerThread.start();
     try {
