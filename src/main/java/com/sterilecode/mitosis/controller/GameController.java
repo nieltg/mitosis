@@ -84,6 +84,7 @@ public class GameController implements Runnable, Observer {
       processInput();
       updatePhysics(deltaTime);
       detectCollision();
+      detectReachedBottom();
       detectOutOfBound();
       spawnEnemies();
       spawnPowerUps();
@@ -238,9 +239,23 @@ public class GameController implements Runnable, Observer {
 					if (enemyOrPowerUp instanceof PowerUp) {
 						((PowerUp) enemyOrPowerUp).applyPowerUp(bullet.getOwner());
 					}
+					++score;
 					mustDelete.add(enemyOrPowerUp);
 		    }
 	    }
+    }
+    deleteObjects(mustDelete);
+  }
+
+  private void detectReachedBottom() {
+    List<Enemy> enemies = gameObjects.stream().filter(x ->x instanceof Enemy).map(y -> (Enemy) y)
+                          .collect(Collectors.toList());
+    List<GameObject> mustDelete = new ArrayList<>();
+    for (Enemy enemy : enemies) {
+      if (enemy.getPosition().getY() > gameDevice.getBufferHeight()) {
+        --life;
+        mustDelete.add(enemy);
+      }
     }
     deleteObjects(mustDelete);
   }
