@@ -19,4 +19,7 @@ package com.sterilecode.mitosis.common;
 public class Constants {
   public static final long NANOSECONDS_IN_A_SECOND = 1000000000;
   public static final long NANOSECONDS_IN_A_MILLISECOND = 1000000;
+  public static final String ENEMY_SERVICE_ID = "Enemy";
+  public static final String POWER_UP_SERVICE_ID = "PowerUp";
+  public static final String BEHAVIOR_SERVICE_ID = "Behavior";
 }
