@@ -17,6 +17,7 @@ import com.sterilecode.mitosis.controller.GameController;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
+import com.sterilecode.mitosis.view.swing.MenuDialog;
 import java.io.IOException;
 
 public class Main {
@@ -36,20 +37,29 @@ public class Main {
       return;
     }
 
-    // Initialize and show Swing UI
-    GameDevice gameDevice = new GameFrame();
+    // Initialize game device, show menu dialog
+    GameFrame gameDevice = new GameFrame();
 
-    // TODO: show main menu
+    // Loop between main menu and game, only exiting from main menu or if this thread is interrupted
+    while (true) {
 
-    // DEVELOPMENT: run GameController thread and wait for it to end
-    GameController gameController = new GameController(gameDevice, 1);
-    Thread gameControllerThread = new Thread(gameController);
-    gameControllerThread.start();
-    try {
-      gameControllerThread.join();
-    } catch (InterruptedException exception) {
-      // Ignore interrupts
+      MenuDialog menuDialog = new MenuDialog(gameDevice);
+      menuDialog.setVisible(true);
+
+      // Run GameController thread, then show it on the game frame.
+      GameController gameController = new GameController(gameDevice, 1);
+      Thread gameControllerThread = new Thread(gameController);
+      gameControllerThread.start();
+      gameDevice.showFrame();
+
+      // Wait for the game to end.
+      try {
+        gameControllerThread.join();
+      } catch (InterruptedException exception) {
+        System.exit(0);
+      } finally {
+        gameDevice.hideFrame();
+      }
     }
-
   }
 }
