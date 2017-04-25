@@ -44,6 +44,8 @@ public class GameController implements Runnable, Observer {
   private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
   private final int INITIAL_HEALTH = 3;
 
+  private final List<GameListener> gameListeners = new ArrayList<>();
+
   private GameDevice gameDevice;
   private Renderer renderer;
   private List<GameObject> gameObjects;
@@ -77,6 +79,7 @@ public class GameController implements Runnable, Observer {
   public void run() {
 
     System.out.println("Starting game loop...");
+    gameListeners.forEach(listener -> listener.gameStarted(this));
 
     // The game loop - variable delta time
     while (isGameRunning) {
@@ -252,6 +255,7 @@ public class GameController implements Runnable, Observer {
           }
           ++score;
           mustDelete.add(enemyOrPowerUp);
+          gameListeners.forEach(listener -> listener.gameObjectHit(this, enemyOrPowerUp));
         }
       }
     }
@@ -266,6 +270,7 @@ public class GameController implements Runnable, Observer {
       if (enemy.getPosition().getY() > gameDevice.getBufferHeight()) {
         --life;
         mustDelete.add(enemy);
+        gameListeners.forEach(listener -> listener.gameObjectReachedBottom(this, enemy));
       }
     }
     deleteObjects(mustDelete);
@@ -299,6 +304,7 @@ public class GameController implements Runnable, Observer {
                 .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
         newEnemy.addObserver(this);
         gameObjects.add(newEnemy);
+        gameListeners.forEach(listener -> listener.gameObjectSpawned(this, newEnemy));
       } catch (Exception exception) {
         System.out.println(exception.getMessage());
         exception.printStackTrace();
@@ -319,6 +325,7 @@ public class GameController implements Runnable, Observer {
                 .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
         newPowerUp.addObserver(this);
         gameObjects.add(newPowerUp);
+        gameListeners.forEach(listener -> listener.gameObjectSpawned(this, newPowerUp));
       } catch (Exception exception) {
         System.out.println(exception.getMessage());
         exception.printStackTrace();
@@ -330,6 +337,15 @@ public class GameController implements Runnable, Observer {
    * Ends the game - displays game over text and high score.
    */
   private void gameOver() {
+    gameListeners.forEach(listener -> listener.gameOver(this));
     // TODO
+  }
+
+  public void addGameListener(GameListener listener) {
+    gameListeners.add(listener);
+  }
+
+  public void removeGameListener(GameListener listener) {
+    gameListeners.remove(listener);
   }
 }
