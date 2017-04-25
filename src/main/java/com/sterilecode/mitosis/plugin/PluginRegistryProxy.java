@@ -1,6 +1,8 @@
 package com.sterilecode.mitosis.plugin;
 
 import com.sterilecode.mitosis.plugin.client.IPluginRegistry;
+import com.sterilecode.mitosis.plugin.client.RegistrationToken;
+import com.sterilecode.mitosis.plugin.client.RegistryListener;
 import java.util.List;
 
 public class PluginRegistryProxy implements IPluginRegistry {
@@ -12,14 +14,26 @@ public class PluginRegistryProxy implements IPluginRegistry {
   }
 
   @Override
-  public void registerObject(String objectId, Object obj) {
+  public RegistrationToken registerObject(String objectId, Object obj) {
     ObjectSupplier supply = new Supplier(pluginInstance, objectId, obj);
     PluginRegistry.getInstance().registerSupplier(supply);
+
+    return supply;
   }
 
   @Override
   public List<Object> getObjects(String objectId) {
     return PluginRegistry.getInstance().getObjects(objectId);
+  }
+
+  @Override
+  public void addRegistryListener(String serviceId, RegistryListener listener) {
+    // TODO: RegistryListener
+  }
+
+  @Override
+  public void removeRegistryListener(String serviceId, RegistryListener listener) {
+    // TODO: RegistryListener
   }
 
   public static class Supplier extends ObjectSupplier {
