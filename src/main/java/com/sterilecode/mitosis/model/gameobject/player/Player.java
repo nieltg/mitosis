@@ -34,11 +34,6 @@ public class Player extends GameObject {
   public static final double MAX_ANGULAR_VELOCITY = 2.0;
 
   /**
-   * Default life of the player.
-   */
-  private final int defaultLife = 3;
-
-  /**
    * Default rotation of the player
    */
   private final double defaultRotation = 0;
@@ -52,11 +47,6 @@ public class Player extends GameObject {
    * Default speed of the bullet that is shot by the player.
    */
   private final int defaultBulletSpeed = 100;
-
-  /**
-   * Player's current life.
-   */
-  private int life;
 
   /**
    * Player's current minimum time required to shoot another bullet.
@@ -78,28 +68,9 @@ public class Player extends GameObject {
    */
   public Player(Vector position) {
     super(position, -Math.PI / 2.0, new Vector(), 0.0, 24, "Player");
-    life = defaultLife;
     minimumTimeToShoot = defaultMinimumTimeToShoot;
     lastShotTime = 0;
     bulletSpeed = defaultBulletSpeed;
-  }
-
-  /**
-   * increaseLife.
-   */
-  public void increaseLife(int increment) {
-    life += increment;
-  }
-
-  /**
-   * decreaseLife.
-   */
-  public void decreaseLife(int decrement) {
-    life -= decrement;
-  }
-
-  public int getLife() {
-    return life;
   }
 
   /**

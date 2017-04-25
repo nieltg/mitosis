@@ -39,6 +39,7 @@ public class GameController implements Runnable, Observer {
 
   private final long TARGET_FPS = 60;
   private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
+  private final int INITIAL_HEALTH = 3;
 
   private GameDevice gameDevice;
   private Renderer renderer;
@@ -50,6 +51,7 @@ public class GameController implements Runnable, Observer {
   private List<Player> players;
   private long timeSinceLastEnemySpawn;
   private long timeSinceLastPowerUpSpawn;
+  private int life;
 
   /**
    * Creates a new GameController, ready to run.
@@ -85,7 +87,7 @@ public class GameController implements Runnable, Observer {
       detectOutOfBound();
       spawnEnemies();
       spawnPowerUps();
-      renderer.render(gameObjects, players, score);
+      renderer.render(gameObjects, life, score);
 
       // If we are going faster than the ideal delta time, we can wait
       long extraTime = TARGET_DELTA_TIME - (System.nanoTime() - currentTime);
@@ -141,6 +143,7 @@ public class GameController implements Runnable, Observer {
       players.add(player);
     }
 
+    life = INITIAL_HEALTH;
     score = 0;
     fps = 0.0;
     currentTime = System.nanoTime();

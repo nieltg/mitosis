@@ -72,10 +72,10 @@ public class Renderer {
    * Renders game objects on the Renderer's game device's buffer.
    *
    * @param gameObjects List of game objects to be rendered.
-   * @param players List of players (for HUD).
-   * @param score THe current score (for HUD).
+   * @param life The current life (for HUD).
+   * @param score The current score (for HUD).
    */
-  public void render(List<GameObject> gameObjects, List<Player> players, int score) {
+  public void render(List<GameObject> gameObjects, int life, int score) {
     try {
       Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 
@@ -85,7 +85,7 @@ public class Renderer {
       // Draw game objects on the provided graphics object
       drawBackground(graphics);
       drawGame(gameObjects, graphics);
-      drawHud(players, score, graphics);
+      drawHud(life, score, graphics);
 
       // Clean up
       graphics.dispose();
@@ -142,7 +142,7 @@ public class Renderer {
     }
   }
 
-  private void drawHud(List<Player> players, Integer score, Graphics2D graphics) {
+  private void drawHud(Integer life, Integer score, Graphics2D graphics) {
     graphics.setColor(Color.BLACK);
     graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
         RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -153,16 +153,11 @@ public class Renderer {
     graphics.setFont(hudLabelFont);
     graphics.drawString("SCORE", 20, bufferHeight - 45);
 
-    // Draw life counters for each player
-    int offsetX = 120;
-    int spacingX = 120;
-    for (int i = 0; i < players.size(); i++) {
-      graphics.setFont(hudCounterFont);
-      graphics.drawString(Integer.toString(players.get(i).getLife()), offsetX + spacingX * i,
-          bufferHeight - 20);
-      graphics.setFont(hudLabelFont);
-      graphics.drawString("PLAYER " + (i + 1) + " LIFE", offsetX + spacingX * i, bufferHeight - 45);
-    }
+    // Draw life counter
+    graphics.setFont(hudCounterFont);
+    graphics.drawString(life.toString(), 120, bufferHeight - 20);
+    graphics.setFont(hudLabelFont);
+    graphics.drawString(" LIFE", 120, bufferHeight - 45);
   }
 
 }
