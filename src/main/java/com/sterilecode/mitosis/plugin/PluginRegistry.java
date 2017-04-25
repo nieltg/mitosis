@@ -2,6 +2,7 @@ package com.sterilecode.mitosis.plugin;
 
 import com.sterilecode.mitosis.plugin.client.RegistryListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,9 @@ public class PluginRegistry {
               listener.registryObjectRemoved(objectId, source.getObject()));
         }
 
-        if (supplyList.isEmpty())
+        if (supplyList.isEmpty()) {
           knownSupplies.remove(objectId);
+        }
       }
 
       source.removeDisposalListener(this);
@@ -61,16 +63,21 @@ public class PluginRegistry {
 
     List<RegistryListener> listenerList = registryListeners.get(objectId);
 
-    if (listenerList != null)
+    if (listenerList != null) {
       listenerList.forEach(listener -> listener.registryObjectAdded(objectId, supply.getObject()));
+    }
   }
 
   public List<Object> getObjects(String objectId) {
     List<ObjectSupplier> supplies = knownSupplies.get(objectId);
 
-    return supplies.stream()
-        .map(ObjectSupplier::getObject)
-        .collect(Collectors.toList());
+    if (supplies == null) {
+      return Collections.emptyList();
+    } else {
+      return supplies.stream()
+          .map(ObjectSupplier::getObject)
+          .collect(Collectors.toList());
+    }
   }
 
   public void addRegistryListener(String serviceId, RegistryListener listener) {
@@ -90,8 +97,9 @@ public class PluginRegistry {
     if (listenerList != null) {
       listenerList.remove(listener);
 
-      if (listenerList.isEmpty())
+      if (listenerList.isEmpty()) {
         registryListeners.remove(serviceId);
+      }
     }
   }
 }
