@@ -12,9 +12,14 @@ public class PluginRegistry {
 
   private final Map<String, List<ObjectSupplier>> knownSupplies = new HashMap<>();
 
-  private final ObjectSupplier.DisposalListener supplyDisposalListener = source -> {
-    List<ObjectSupplier> supplyList = knownSupplies.get(source.getObjectId());
-    supplyList.remove(source);
+  private final ObjectDisposalListener supplyDisposalListener = new ObjectDisposalListener() {
+    @Override
+    public void objectDisposed(ObjectSupplier source) {
+      List<ObjectSupplier> supplyList = knownSupplies.get(source.getObjectId());
+      supplyList.remove(source);
+
+      source.removeDisposalListener(this);
+    }
   };
 
   private PluginRegistry() {
