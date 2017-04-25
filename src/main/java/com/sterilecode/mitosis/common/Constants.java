@@ -22,4 +22,5 @@ public class Constants {
   public static final String ENEMY_SERVICE_ID = "Enemy";
   public static final String POWER_UP_SERVICE_ID = "PowerUp";
   public static final String BEHAVIOR_SERVICE_ID = "Behavior";
+  public static final String VIEW_PROVIDER_SERVICE_ID = "ViewProvider";
 }
