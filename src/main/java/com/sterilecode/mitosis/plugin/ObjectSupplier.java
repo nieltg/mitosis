@@ -1,11 +1,12 @@
 package com.sterilecode.mitosis.plugin;
 
+import com.sterilecode.mitosis.plugin.client.RegistrationToken;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjectSupplier {
+public class ObjectSupplier implements RegistrationToken {
 
-  private final List<DisposalListener> disposalListeners = new ArrayList<>();
+  private final List<ObjectDisposalListener> disposalListeners = new ArrayList<>();
 
   private final String supplyObjectId;
   private final Object supplyObject;
@@ -16,7 +17,7 @@ public class ObjectSupplier {
   }
 
   protected void notifyDisposal() {
-    disposalListeners.forEach(listener -> listener.pluginDisposed(this));
+    disposalListeners.forEach(listener -> listener.objectDisposed(this));
   }
 
   public String getObjectId() {
@@ -27,16 +28,16 @@ public class ObjectSupplier {
     return supplyObject;
   }
 
-  public void addDisposalListener(DisposalListener listener) {
+  public void addDisposalListener(ObjectDisposalListener listener) {
     disposalListeners.add(listener);
   }
 
-  public void removeDisposalListener(DisposalListener listener) {
+  public void removeDisposalListener(ObjectDisposalListener listener) {
     disposalListeners.remove(listener);
   }
 
-  public interface DisposalListener {
-
-    void pluginDisposed(ObjectSupplier source);
+  @Override
+  public void unregister() {
+    notifyDisposal();
   }
 }
