@@ -51,13 +51,7 @@ public class Main {
     }
 
     // Load and cache views
-    try {
-      ViewManager.getInstance().loadViews();
-    } catch (IOException exception) {
-      System.out.println(exception.getMessage());
-      exception.printStackTrace();
-      return;
-    }
+    ViewManager.getInstance().initialize();
 
     // Initialize and show Swing UI
     GameDevice gameDevice = new GameFrame();
