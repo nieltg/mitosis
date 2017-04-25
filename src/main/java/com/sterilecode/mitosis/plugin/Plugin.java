@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
+/**
+ * A class that represents a plugin.
+ */
 public class Plugin {
 
   private final List<PluginDisposalListener> disposalListeners = new ArrayList<>();
@@ -22,10 +25,24 @@ public class Plugin {
 
   private IPlugin pluginInstance;
 
+  /**
+   * Create plugin from URL.
+   *
+   * @param url Path to JAR file
+   * @throws IOException whether there is I/O error
+   * @throws PluginException whether there is plugin error
+   */
   public Plugin(URL url) throws IOException, PluginException {
     this(new URLClassLoader(new URL[]{url}, Plugin.class.getClassLoader()));
   }
 
+  /**
+   * Create plugin from class loader.
+   *
+   * @param loader Class loader
+   * @throws IOException whether there is I/O error
+   * @throws PluginException whether there is plugin error
+   */
   public Plugin(ClassLoader loader) throws IOException, PluginException {
     // Keep class loader for class-loading.
     pluginClassLoader = loader;
@@ -57,18 +74,39 @@ public class Plugin {
     }
   }
 
+  /**
+   * Get plugin name from manifest.
+   *
+   * @return Plugin name
+   */
   public String getPluginName() {
     return pluginName;
   }
 
+  /**
+   * Get plugin version from manifest.
+   *
+   * @return Plugin version
+   */
   public String getPluginVersion() {
     return pluginVersion;
   }
 
+  /**
+   * Check if a plugin is active or not.
+   *
+   * @return True if active, otherwise False.
+   */
   public boolean isActivated() {
     return pluginInstance != null;
   }
 
+  /**
+   * Activate a plugin and integrate it to plugin registry.
+   *
+   * @throws InstantiationException whether plugin can't be instantiated
+   * @throws IllegalAccessException whether there's access-control error
+   */
   public void activate() throws InstantiationException, IllegalAccessException {
 
     if (pluginInstance != null) {
@@ -79,6 +117,9 @@ public class Plugin {
     pluginInstance.activate(new PluginRegistryProxy(this));
   }
 
+  /**
+   * Deactivate a plugin and disintegrate it from plugin registry.
+   */
   public void deactivate() {
 
     disposalListeners.forEach(listener -> listener.pluginDisposed(this));
@@ -91,10 +132,20 @@ public class Plugin {
     pluginInstance = null;
   }
 
+  /**
+   * Add a listener for listening disposal event.
+   *
+   * @param listener A listener.
+   */
   public void addDisposalListener(PluginDisposalListener listener) {
     disposalListeners.add(listener);
   }
 
+  /**
+   * Remove a listener from listening disposal event.
+   *
+   * @param listener A listener.
+   */
   public void removeDisposalListener(PluginDisposalListener listener) {
     disposalListeners.remove(listener);
   }

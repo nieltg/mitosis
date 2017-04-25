@@ -17,10 +17,18 @@ public class PluginManager {
   private PluginManager() {
   }
 
+  /**
+   * Get an instance of plugin manager.
+   *
+   * @return An instance of PluginManager
+   */
   public static PluginManager getInstance() {
     return pluginManagerInstance;
   }
 
+  /**
+   * Discover plugin in default directory.
+   */
   public void discoverPluginsInDefaultDirectory() {
     File pluginDir = new File(PLUGINS_DIR);
 
@@ -30,6 +38,12 @@ public class PluginManager {
     }
   }
 
+  /**
+   * Discover plugin in specific directory.
+   *
+   * @param pluginDir Plugin directory
+   * @throws IOException whether supplied parameter is not a directory
+   */
   public void discoverPlugins(File pluginDir) throws IOException {
 
     if (!pluginDir.isDirectory()) {
@@ -46,6 +60,11 @@ public class PluginManager {
     }
   }
 
+  /**
+   * Get discovered plugins.
+   *
+   * @return List of plugins
+   */
   public List<Plugin> getPlugins() {
     return pluginList;
   }
