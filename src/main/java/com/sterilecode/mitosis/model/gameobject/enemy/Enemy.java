@@ -5,6 +5,8 @@ import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.event.SplitEvent;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 
+import java.util.Random;
+
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 /**
@@ -38,10 +40,16 @@ public abstract class Enemy extends GameObject {
     return behavior;
   }
 
+  /**
+   * setSplitting.
+   * Set enemie's splitting direction and speed.
+   *
+   * @param splitting split direction.
+   */
   public void setSplitting(int splitting) {
     this.splitting = splitting;
     if (splitting == 1 || splitting == -1) {
-      splitSpeed = 10.0;
+      splitSpeed = 25.0;
     }
   }
 
@@ -54,15 +62,19 @@ public abstract class Enemy extends GameObject {
 
     // Split after a specific time
     elatedTime += deltaTime;
-    if (elatedTime > NANOSECONDS_IN_A_SECOND * 3) {
-      split();
-      elatedTime -= NANOSECONDS_IN_A_SECOND * 3;
+    if (elatedTime > NANOSECONDS_IN_A_SECOND * 5) {
+      Random random = new Random(10);
+      if (random.nextInt() < 3) {
+        split();
+      }
+      elatedTime -= NANOSECONDS_IN_A_SECOND * 5;
     }
 
     // Update split position and velocity
     if (splitting == 1 || splitting == -1) {
       splitSpeed -= 0.2;
-      setPosition(getPosition().add(new Vector(splitting * splitSpeed * deltaTime / NANOSECONDS_IN_A_SECOND, 0)));
+      setPosition(getPosition().add(
+                          new Vector(splitting * splitSpeed * deltaTime / NANOSECONDS_IN_A_SECOND, 0)));
       if (splitSpeed <= 0.0) {
         splitting = 0;
         splitSpeed = 0.0;
