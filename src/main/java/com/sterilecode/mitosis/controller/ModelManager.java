@@ -13,6 +13,10 @@ package com.sterilecode.mitosis.controller;
  * Last modified at  : 4/25/2017
  */
 
+import static com.sterilecode.mitosis.common.Constants.BEHAVIOR_SERVICE_ID;
+import static com.sterilecode.mitosis.common.Constants.ENEMY_SERVICE_ID;
+import static com.sterilecode.mitosis.common.Constants.POWER_UP_SERVICE_ID;
+
 import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.behavior.straightbehavior.StraightBehavior;
 import com.sterilecode.mitosis.model.gameobject.enemy.Bacteria;
@@ -20,19 +24,14 @@ import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 import com.sterilecode.mitosis.model.gameobject.powerup.ExtraLifePowerUp;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
 import com.sterilecode.mitosis.plugin.ObjectManager;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
-
-import static com.sterilecode.mitosis.common.Constants.BEHAVIOR_SERVICE_ID;
-import static com.sterilecode.mitosis.common.Constants.ENEMY_SERVICE_ID;
-import static com.sterilecode.mitosis.common.Constants.POWER_UP_SERVICE_ID;
 
 /**
  * A singleton for caching and retrieving list of model classes.
  */
 public class ModelManager {
+
   private static ModelManager modelManagerInstance = new ModelManager();
 
   private ModelManager() {
@@ -67,7 +66,7 @@ public class ModelManager {
    */
   public List<Class<? extends Enemy>> getListOfEnemy() {
     return ObjectManager.getInstance().getObjects(ENEMY_SERVICE_ID)
-           .stream().map(x -> (Class<? extends Enemy>) x).collect(Collectors.toList());
+        .stream().map(x -> (Class<? extends Enemy>) x).collect(Collectors.toList());
   }
 
   /**
@@ -77,7 +76,7 @@ public class ModelManager {
    */
   public List<Class<? extends Behavior>> getListOfBehavior() {
     return ObjectManager.getInstance().getObjects(BEHAVIOR_SERVICE_ID)
-           .stream().map(x -> (Class<? extends Behavior>) x).collect(Collectors.toList());
+        .stream().map(x -> (Class<? extends Behavior>) x).collect(Collectors.toList());
   }
 
   /**
@@ -87,7 +86,7 @@ public class ModelManager {
    */
   public List<Class<? extends PowerUp>> getListOfPowerUp() {
     return ObjectManager.getInstance().getObjects(POWER_UP_SERVICE_ID)
-           .stream().map(x -> (Class<? extends PowerUp>) x).collect(Collectors.toList());
+        .stream().map(x -> (Class<? extends PowerUp>) x).collect(Collectors.toList());
   }
 
   /**

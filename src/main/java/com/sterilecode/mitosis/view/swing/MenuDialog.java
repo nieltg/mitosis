@@ -14,6 +14,10 @@ import javax.swing.border.EmptyBorder;
 
 public class MenuDialog extends JDialog {
 
+  /**
+   * Creates a new main menu dialog.
+   * @param parent The dialog parent frame of this menu. Pass null to use a global, shared parent.
+   */
   public MenuDialog(JFrame parent) {
     super(parent, "Mitosis");
     setModal(true);
@@ -21,7 +25,6 @@ public class MenuDialog extends JDialog {
 
     JPanel panel = new JPanel();
     panel.setLayout(new GridLayout(5, 1, 20, 20));
-    JButton button;
 
     JLabel titleLabel = new JLabel("mitosis");
     titleLabel.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 32));
@@ -33,6 +36,8 @@ public class MenuDialog extends JDialog {
     descriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
     descriptionLabel.setVerticalAlignment(SwingConstants.TOP);
     panel.add(descriptionLabel);
+
+    JButton button;
 
     button = new JButton("New Game");
     button.addActionListener(actionEvent -> {
@@ -59,10 +64,10 @@ public class MenuDialog extends JDialog {
 
     Point loc = parent.getLocation();
     Dimension size = parent.getSize();
-    Dimension mSize = getSize();
+    Dimension menuSize = getSize();
 
-    loc.x += (size.width - mSize.width) / 2;
-    loc.y += (size.height - mSize.height) / 2;
+    loc.x += (size.width - menuSize.width) / 2;
+    loc.y += (size.height - menuSize.height) / 2;
 
     setLocation(loc);
   }

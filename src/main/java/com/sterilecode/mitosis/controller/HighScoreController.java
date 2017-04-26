@@ -28,6 +28,10 @@ public class HighScoreController {
     return highScore;
   }
 
+  /**
+   * Checks whether a score is the new high score.
+   * @param newScore The new score to be checked.
+   */
   public void checkHighScore(int newScore) {
     if (newScore > highScore) {
       highScore = newScore;

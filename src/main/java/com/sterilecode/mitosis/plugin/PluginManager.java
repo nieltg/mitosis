@@ -29,13 +29,9 @@ public class PluginManager {
   /**
    * Discover plugin in default directory.
    */
-  public void discoverPluginsInDefaultDirectory() {
+  public void discoverPluginsInDefaultDirectory() throws IOException, PluginException {
     File pluginDir = new File(PLUGINS_DIR);
-
-    try {
-      discoverPlugins(pluginDir);
-    } catch (IOException e) {
-    }
+    discoverPlugins(pluginDir);
   }
 
   /**
@@ -44,7 +40,7 @@ public class PluginManager {
    * @param pluginDir Plugin directory
    * @throws IOException whether supplied parameter is not a directory
    */
-  public void discoverPlugins(File pluginDir) throws IOException {
+  public void discoverPlugins(File pluginDir) throws IOException, PluginException {
 
     if (!pluginDir.isDirectory()) {
       throw new IOException(pluginDir + " is not a directory");
@@ -53,10 +49,7 @@ public class PluginManager {
     File[] jarFiles = pluginDir.listFiles((file, name) -> name.toLowerCase().endsWith(".jar"));
 
     for (File jarFile : jarFiles) {
-      try {
-        pluginList.add(new Plugin(jarFile.toURI().toURL()));
-      } catch (PluginException e) {
-      }
+      pluginList.add(new Plugin(jarFile.toURI().toURL()));
     }
   }
 

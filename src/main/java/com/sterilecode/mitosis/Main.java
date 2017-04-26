@@ -28,6 +28,7 @@ public class Main {
 
   /**
    * Program entry point.
+   *
    * @param args Command-line arguments for this program.
    */
   public static void main(String[] args) {
@@ -37,17 +38,22 @@ public class Main {
     modelManager.loadLocalBehavior();
     modelManager.loadLocalPowerUp();
 
-    // Load plugins
+    // Discover plugins
     PluginManager pluginManager = PluginManager.getInstance();
-    pluginManager.discoverPluginsInDefaultDirectory();
+    try {
+      pluginManager.discoverPluginsInDefaultDirectory();
+    } catch (Exception e) {
+      System.out.println("DEBUG: Failed to discover plugins.");
+    }
 
-    System.out.println("DEBUG: Discovering plugins... ");
-
+    // Load plugins
     for (Plugin plugin : pluginManager.getPlugins()) {
-      System.out.println("DEBUG: Plugin: " + plugin.getPluginName() + " " + plugin.getPluginVersion());
+      System.out
+          .println("DEBUG: Plugin: " + plugin.getPluginName() + " " + plugin.getPluginVersion());
       try {
         plugin.activate();
       } catch (Exception e) {
+        System.out.println("DEBUG: Plugin failed to activate: " + plugin.getPluginName());
       }
     }
 

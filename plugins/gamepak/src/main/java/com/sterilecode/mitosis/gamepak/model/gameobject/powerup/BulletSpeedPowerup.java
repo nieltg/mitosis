@@ -9,10 +9,10 @@ import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
  * A power up that increase the player's bullet speed.
  */
 public class BulletSpeedPowerup extends PowerUp {
+
   /**
    * Constructor.
-   *
-   * @param position
+   * @param position Creates a bullet speed power up.
    */
   public BulletSpeedPowerup(Vector position) {
     super(position, new Vector(0, 20), 5, "BulletSpeedPowerUp@GamePak");
@@ -20,9 +20,8 @@ public class BulletSpeedPowerup extends PowerUp {
   }
 
   /**
-   * applyPowerUp.
-   *
-   * @param player
+   * Applies this power up's effects to a player.
+   * @param player The player on which to apply this power up's effects.
    */
   public void applyPowerUp(Player player) {
     player.increaseBulletSpeed(10);

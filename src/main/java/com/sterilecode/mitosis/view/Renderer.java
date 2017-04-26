@@ -16,11 +16,9 @@ package com.sterilecode.mitosis.view;
 import static java.awt.Font.SANS_SERIF;
 
 import com.sterilecode.mitosis.model.gameobject.GameObject;
-import com.sterilecode.mitosis.model.gameobject.player.Player;
 import com.sterilecode.mitosis.view.ViewManager.ViewNotLoadedException;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
@@ -28,7 +26,6 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferStrategy;
-import java.io.IOException;
 import java.util.List;
 
 public class Renderer {
@@ -41,6 +38,11 @@ public class Renderer {
   private Font hudCounterFont;
   private Font hudLabelFont;
 
+  /**
+   * Creates a renderer.
+   *
+   * @param gameDevice The game device on which buffer this renderer will draw on.
+   */
   public Renderer(GameDevice gameDevice) {
     bufferStrategy = gameDevice.getBufferStrategy();
     bufferX = gameDevice.getBufferX();
@@ -120,8 +122,10 @@ public class Renderer {
     // Draw game objects
     ViewManager viewManager = ViewManager.getInstance();
     for (GameObject gameObject : gameObjects) {
-      int objTopLeftX = (int) Math.round(gameObject.getPosition().getX() - gameObject.getSize());
-      int objTopLeftY = (int) Math.round(gameObject.getPosition().getY() - gameObject.getSize());
+      int objTopLeftX = (int) Math
+          .round(gameObject.getPosition().getX() - gameObject.getSize());
+      int objTopLeftY = (int) Math
+          .round(gameObject.getPosition().getY() - gameObject.getSize());
       int objCenterX = (int) Math.round(gameObject.getPosition().getX());
       int objCenterY = (int) Math.round(gameObject.getPosition().getY());
       int objWidth = (int) Math.round(gameObject.getSize() * 2);
