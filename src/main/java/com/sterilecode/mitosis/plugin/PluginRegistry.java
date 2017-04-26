@@ -30,8 +30,10 @@ public class PluginRegistry {
         if (supplyList.remove(source)) {
           List<RegistryListener> listenerList = registryListeners.get(objectId);
 
-          new CopyOnWriteArrayList<>(listenerList).forEach(listener ->
-              listener.registryObjectRemoved(objectId, source.getObject()));
+          if (listenerList != null) {
+            new CopyOnWriteArrayList<>(listenerList).forEach(listener ->
+                listener.registryObjectRemoved(objectId, source.getObject()));
+          }
         }
 
         if (supplyList.isEmpty()) {
