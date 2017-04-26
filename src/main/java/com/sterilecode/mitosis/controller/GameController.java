@@ -13,7 +13,6 @@ import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 import com.sterilecode.mitosis.model.gameobject.player.Player;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
-import com.sterilecode.mitosis.plugin.Plugin;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /*
@@ -42,6 +42,8 @@ public class GameController implements Runnable, Observer {
   private static final long TARGET_FPS = 60;
   private static final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
   private static final int INITIAL_HEALTH = 3;
+
+  private final List<GameListener> gameListeners = new ArrayList<>();
 
   private GameDevice gameDevice;
   private Renderer renderer;
@@ -76,6 +78,7 @@ public class GameController implements Runnable, Observer {
   public void run() {
 
     System.out.println("Starting game loop...");
+    new CopyOnWriteArrayList<>(gameListeners).forEach(listener -> listener.gameStarted(this));
 
     // The game loop - variable delta time
     while (isGameRunning) {
@@ -250,6 +253,8 @@ public class GameController implements Runnable, Observer {
           }
           ++score;
           mustDelete.add(enemyOrPowerUp);
+          new CopyOnWriteArrayList<>(gameListeners)
+              .forEach(listener -> listener.gameObjectHit(this, enemyOrPowerUp));
         }
       }
     }
@@ -270,6 +275,8 @@ public class GameController implements Runnable, Observer {
         }
 
         mustDelete.add(enemy);
+        new CopyOnWriteArrayList<>(gameListeners)
+            .forEach(listener -> listener.gameObjectReachedBottom(this, enemy));
       }
     }
     deleteObjects(mustDelete);
@@ -304,6 +311,8 @@ public class GameController implements Runnable, Observer {
             .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
         newEnemy.addObserver(this);
         gameObjects.add(newEnemy);
+        new CopyOnWriteArrayList<>(gameListeners)
+            .forEach(listener -> listener.gameObjectSpawned(this, newEnemy));
       } catch (Exception exception) {
         System.out.println(exception.getMessage());
         exception.printStackTrace();
@@ -325,6 +334,8 @@ public class GameController implements Runnable, Observer {
             .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
         newPowerUp.addObserver(this);
         gameObjects.add(newPowerUp);
+        new CopyOnWriteArrayList<>(gameListeners)
+            .forEach(listener -> listener.gameObjectSpawned(this, newPowerUp));
       } catch (Exception exception) {
         System.out.println(exception.getMessage());
         exception.printStackTrace();
@@ -336,6 +347,7 @@ public class GameController implements Runnable, Observer {
    * Ends the game - displays game over text and high score.
    */
   private void gameOver() {
+    new CopyOnWriteArrayList<>(gameListeners).forEach(listener -> listener.gameOver(this));
     InputState inputState;
     do {
       inputState = gameDevice.getInputState().clone();
@@ -346,5 +358,13 @@ public class GameController implements Runnable, Observer {
         // Ignore interrupts, doesn't matter anyway.
       }
     } while (!inputState.isMenuKeyPressed());
+  }
+
+  public void addGameListener(GameListener listener) {
+    gameListeners.add(listener);
+  }
+
+  public void removeGameListener(GameListener listener) {
+    gameListeners.remove(listener);
   }
 }
