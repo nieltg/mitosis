@@ -30,6 +30,8 @@ public class AudioAction implements GameListener {
   public void gameOver(GameController controller) {
     try {
       AudioManager.getInstance().playAudio("over");
+      AudioEntity entity = AudioManager.getInstance().getAudioEntity("start");
+      entity.stop();
     } catch (Exception ignored) {
     }
   }
