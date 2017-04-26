@@ -42,7 +42,6 @@ public class Renderer {
 
   /**
    * Creates a renderer.
-   *
    * @param gameDevice The game device on which buffer this renderer will draw on.
    */
   public Renderer(GameDevice gameDevice) {
@@ -53,8 +52,15 @@ public class Renderer {
     bufferHeight = gameDevice.getBufferHeight();
 
     // Load custom fonts
+
+  }
+
+  /**
+   * Load custom font resources for the renderer.
+   */
+  public static void loadFonts() {
     try {
-      ClassLoader classLoader = getClass().getClassLoader();
+      ClassLoader classLoader = Renderer.class.getClassLoader();
 
       hudCounterFont = Font.createFont(Font.TRUETYPE_FONT,
           classLoader.getResourceAsStream("fonts/lato/Lato-Thin.ttf"))

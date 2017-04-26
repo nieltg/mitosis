@@ -19,6 +19,7 @@ import com.sterilecode.mitosis.plugin.ObjectManager;
 import com.sterilecode.mitosis.plugin.Plugin;
 import com.sterilecode.mitosis.plugin.PluginManager;
 import com.sterilecode.mitosis.view.GameDevice;
+import com.sterilecode.mitosis.view.Renderer;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
 import com.sterilecode.mitosis.view.swing.MenuDialog;
@@ -37,6 +38,9 @@ public class Main {
     modelManager.loadLocalEnemies();
     modelManager.loadLocalBehavior();
     modelManager.loadLocalPowerUp();
+
+    // Load custom fonts for renderer
+    Renderer.loadFonts();
 
     // Discover plugins
     PluginManager pluginManager = PluginManager.getInstance();
@@ -70,7 +74,8 @@ public class Main {
       menuDialog.setVisible(true);
 
       // Run GameController thread, then show it on the game frame.
-      GameController gameController = new GameController(gameDevice, 2);
+      GameController gameController = new GameController(gameDevice,
+          menuDialog.getNumberOfPlayers());
       Thread gameControllerThread = new Thread(gameController);
       gameControllerThread.start();
       gameDevice.showFrame();
