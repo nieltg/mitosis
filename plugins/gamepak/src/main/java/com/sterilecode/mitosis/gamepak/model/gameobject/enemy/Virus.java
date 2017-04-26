@@ -17,9 +17,4 @@ public class Virus extends Enemy {
     super(position, new Vector(0, 40), 5, "Virus@GamePak");
     behavior = new AlternatingSpeedBehavior(this);
   }
-
-  @Override
-  public void split() {
-
-  }
 }

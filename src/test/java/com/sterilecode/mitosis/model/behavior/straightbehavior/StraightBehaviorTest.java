@@ -1,6 +1,6 @@
 package com.sterilecode.mitosis.model.behavior.straightbehavior;
 
-import com.sterilecode.mitosis.common.Vector;
+/*import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.*;*/
 
 
 /*

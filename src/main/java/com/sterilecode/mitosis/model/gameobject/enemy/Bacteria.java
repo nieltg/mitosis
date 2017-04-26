@@ -29,12 +29,4 @@ public class Bacteria extends Enemy {
     super(position, new Vector(0, 20), 5, "Bacteria");
     behavior = new StraightBehavior(this);
   }
-
-  /**
-   * split.
-   */
-  public void split() {
-    this.setChanged();
-    notifyObservers(new SplitEvent(new Bacteria(position)));
-  }
 }
