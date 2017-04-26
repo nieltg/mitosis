@@ -18,6 +18,7 @@ import java.util.Observable;/*
  * An abstract class that is the super class of all objects in the game.
  */
 public abstract class GameObject extends Observable {
+
   protected Vector position;
   protected double rotation;
   protected Vector velocity;
@@ -28,7 +29,8 @@ public abstract class GameObject extends Observable {
   /**
    * Constructor.
    */
-  public GameObject(Vector position, double rotation, Vector velocity, double angularVelocity, double size, String viewId) {
+  public GameObject(Vector position, double rotation, Vector velocity, double angularVelocity,
+      double size, String viewId) {
     this.position = position;
     this.rotation = rotation;
     this.velocity = velocity;
@@ -39,6 +41,7 @@ public abstract class GameObject extends Observable {
 
   /**
    * getPosition.
+   *
    * @return position;
    */
   public Vector getPosition() {

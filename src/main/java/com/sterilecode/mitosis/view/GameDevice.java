@@ -19,9 +19,13 @@ public interface GameDevice {
 
   // Display operations
   BufferStrategy getBufferStrategy();
+
   int getBufferWidth();
+
   int getBufferHeight();
+
   int getBufferX();
+
   int getBufferY();
 
   // Input operations

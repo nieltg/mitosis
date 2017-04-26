@@ -33,6 +33,9 @@ public class GameFrame extends JFrame implements GameDevice, KeyListener {
   private InputState inputState;
   private Map<Integer, Consumer<Boolean>> keyMap;
 
+  /**
+   * Creates a new game frame (window).
+   */
   public GameFrame() {
 
     // Set up window and drawing surface

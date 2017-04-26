@@ -18,7 +18,7 @@ import com.sterilecode.mitosis.model.event.SplitEvent;
  */
 
 /**
- * Enemy that has StraightBehavior
+ * Enemy Bacteria, has StraightBehavior.
  */
 public class Bacteria extends Enemy {
 

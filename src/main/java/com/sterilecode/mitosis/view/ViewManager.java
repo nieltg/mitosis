@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
-import javax.swing.text.View;
 
 /**
  * A singleton for caching and retrieving views (game object images).
@@ -31,7 +30,7 @@ public class ViewManager {
 
         Stack<ViewProvider> providerStack = providerMap.get(providerNamespace);
 
-        if(providerStack == null) {
+        if (providerStack == null) {
           providerStack = new Stack<>();
           providerMap.put(providerNamespace, providerStack);
         }
@@ -49,11 +48,12 @@ public class ViewManager {
 
       Stack<ViewProvider> providerStack = providerMap.get(providerNamespace);
 
-      if(providerStack != null) {
+      if (providerStack != null) {
         providerStack.remove(viewProvider);
 
-        if(providerStack.isEmpty())
+        if (providerStack.isEmpty()) {
           providerMap.remove(providerNamespace);
+        }
       }
     }
   };
@@ -69,6 +69,9 @@ public class ViewManager {
     // Prevent class instantiation as this is a singleton
   }
 
+  /**
+   * Initializes this view manager singleton with an instance of object manager.
+   */
   public void initialize() {
     ObjectManager objManager = ObjectManager.getInstance();
 
@@ -86,7 +89,8 @@ public class ViewManager {
    * @return A view corresponding to the viewId.
    */
   public Image getView(String viewId) throws ViewNotLoadedException {
-    String namespace, locViewId;
+    String namespace;
+    String locViewId;
     int separatorIndex = viewId.indexOf('@');
 
     if (separatorIndex == -1) {
@@ -99,20 +103,20 @@ public class ViewManager {
 
     Stack<ViewProvider> providerStack = providerMap.get(namespace);
 
-    if(providerStack == null) {
+    if (providerStack == null) {
       throw new ViewNotLoadedException("Namespace is not found");
     }
 
     ViewProvider viewProvider = providerStack.peek();
 
-    if(viewProvider == null) {
+    if (viewProvider == null) {
       // Should not be happened anyway.
       throw new ViewNotLoadedException("Provider is not found");
     }
 
     Image viewImage = viewProvider.getView(locViewId);
 
-    if(viewImage == null) {
+    if (viewImage == null) {
       throw new ViewNotLoadedException("View " + locViewId + " is missing in specified namespace");
     }
 

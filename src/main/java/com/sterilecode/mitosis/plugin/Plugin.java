@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -122,7 +123,8 @@ public class Plugin {
    */
   public void deactivate() {
 
-    disposalListeners.forEach(listener -> listener.pluginDisposed(this));
+    new CopyOnWriteArrayList<>(disposalListeners)
+        .forEach(listener -> listener.pluginDisposed(this));
 
     if (pluginInstance == null) {
       throw new IllegalStateException("Plugin is not activated yet");

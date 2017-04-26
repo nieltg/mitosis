@@ -1,11 +1,9 @@
 package com.sterilecode.mitosis.gamepak.model.behavior;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
+
 import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
-import com.sterilecode.mitosis.common.Vector;
-
-import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
-import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -23,15 +21,14 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 /**
  * A behavior that alternates it's owner velocity in certain period.
  */
-public class AlternatingSpeedBehavior extends Behavior{
+public class AlternatingSpeedBehavior extends Behavior {
+
   private long lastTimeAlternating = 0;
   private long elatedTime;
   private boolean slowDown;
 
   /**
-   * Constructor
-   *
-   * @param owner
+   * Constructor for alternating speed behavior.
    */
   public AlternatingSpeedBehavior(GameObject owner) {
     super(owner);
