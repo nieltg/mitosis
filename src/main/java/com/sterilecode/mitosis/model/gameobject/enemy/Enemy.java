@@ -14,6 +14,8 @@ public abstract class Enemy extends GameObject {
 
   protected Behavior behavior;
   private int splitting;
+  private double splitSpeed;
+  private double splitOffset;
   private long elatedTime;
 
   /**
@@ -22,6 +24,8 @@ public abstract class Enemy extends GameObject {
   public Enemy(Vector position, Vector velocity, double size, String viewId) {
     super(position, 0.0, velocity, 0.0, size, viewId);
     splitting = 0;
+    splitSpeed = 0.0;
+    splitOffset = 0.0;
     elatedTime = 0;
   }
 
@@ -37,7 +41,7 @@ public abstract class Enemy extends GameObject {
   public void setSplitting(int splitting) {
     this.splitting = splitting;
     if (splitting == 1 || splitting == -1) {
-      setVelocity(getVelocity().add(new Vector((double) splitting * 10, 0)));
+      splitSpeed = 10.0;
     }
   }
 
@@ -47,15 +51,21 @@ public abstract class Enemy extends GameObject {
    */
   public final void update(long deltaTime) {
     behavior.move(deltaTime);
+
+    // Split after a specific time
     elatedTime += deltaTime;
     if (elatedTime > NANOSECONDS_IN_A_SECOND * 3) {
       split();
       elatedTime -= NANOSECONDS_IN_A_SECOND * 3;
     }
+
+    // Update split position and velocity
     if (splitting == 1 || splitting == -1) {
-      setVelocity(getVelocity().add(new Vector(- splitting, 0)));
-      if (getVelocity().getX() == 0) {
+      splitSpeed -= 0.2;
+      setPosition(getPosition().add(new Vector(splitting * splitSpeed * deltaTime / NANOSECONDS_IN_A_SECOND, 0)));
+      if (splitSpeed <= 0.0) {
         splitting = 0;
+        splitSpeed = 0.0;
       }
     }
   }

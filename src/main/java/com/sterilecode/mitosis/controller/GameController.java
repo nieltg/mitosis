@@ -50,6 +50,7 @@ public class GameController implements Runnable, Observer {
   private double fps;
   private long currentTime;
   private boolean isGameRunning;
+  private boolean isThreadRunning;
   private List<Player> players;
   private long timeSinceLastEnemySpawn;
   private long timeSinceLastPowerUpSpawn;
@@ -74,8 +75,8 @@ public class GameController implements Runnable, Observer {
    */
   @Override
   public void run() {
-
     System.out.println("Starting game loop...");
+    isThreadRunning = true;
 
     // The game loop - variable delta time
     while (isGameRunning) {
@@ -346,5 +347,10 @@ public class GameController implements Runnable, Observer {
         // Ignore interrupts, doesn't matter anyway.
       }
     } while (!inputState.isMenuKeyPressed());
+    isThreadRunning = false;
+  }
+
+  public boolean isThreadRunning() {
+    return isThreadRunning;
   }
 }

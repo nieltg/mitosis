@@ -81,14 +81,16 @@ public class Main {
       gameControllerThread.start();
       gameDevice.showFrame();
 
-      // Wait for the game to end.
-      try {
-        gameControllerThread.join();
-      } catch (InterruptedException exception) {
-        System.exit(0);
-      } finally {
-        gameDevice.hideFrame();
+      while (gameController.isThreadRunning()) {
+        try {
+          gameControllerThread.join();
+        } catch (InterruptedException e) {
+          // Ignore if interrupted.
+        }
+        System.out.println("DEBUG: Exit game controller join.");
       }
+
+      gameDevice.hideFrame();
     }
   }
 }
