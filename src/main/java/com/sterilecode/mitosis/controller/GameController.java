@@ -52,6 +52,7 @@ public class GameController implements Runnable, Observer {
   private double fps;
   private long currentTime;
   private boolean isGameRunning;
+  private boolean isThreadRunning;
   private List<Player> players;
   private long timeSinceLastEnemySpawn;
   private long timeSinceLastPowerUpSpawn;
@@ -76,9 +77,9 @@ public class GameController implements Runnable, Observer {
    */
   @Override
   public void run() {
-
     System.out.println("Starting game loop...");
     new CopyOnWriteArrayList<>(gameListeners).forEach(listener -> listener.gameStarted(this));
+    isThreadRunning = true;
 
     // The game loop - variable delta time
     while (isGameRunning) {
@@ -210,7 +211,7 @@ public class GameController implements Runnable, Observer {
    * @param deltaTime Time elapsed between last frame and current frame.
    */
   private void updatePhysics(long deltaTime) {
-    for (GameObject gameObject : gameObjects) {
+    for (GameObject gameObject : new CopyOnWriteArrayList<>(gameObjects)) {
       gameObject.update(deltaTime);
     }
   }
@@ -301,7 +302,7 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns enemies.
    */
   private void spawnEnemies() {
-    if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_MILLISECOND * 500) {
+    if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_SECOND) {
       timeSinceLastEnemySpawn = currentTime;
       List<Class<? extends Enemy>> enemyClasses = ModelManager.getInstance().getListOfEnemy();
       Random random = new Random(System.currentTimeMillis());
@@ -324,7 +325,7 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns power ups.
    */
   private void spawnPowerUps() {
-    if (currentTime - timeSinceLastPowerUpSpawn > NANOSECONDS_IN_A_MILLISECOND * 5000) {
+    if (currentTime - timeSinceLastPowerUpSpawn > NANOSECONDS_IN_A_SECOND * 5) {
       timeSinceLastPowerUpSpawn = currentTime;
       List<Class<? extends PowerUp>> powerUpClasses = ModelManager.getInstance().getListOfPowerUp();
       Random random = new Random(System.currentTimeMillis());
@@ -358,6 +359,11 @@ public class GameController implements Runnable, Observer {
         // Ignore interrupts, doesn't matter anyway.
       }
     } while (!inputState.isMenuKeyPressed());
+    isThreadRunning = false;
+  }
+
+  public boolean isThreadRunning() {
+    return isThreadRunning;
   }
 
   public void addGameListener(GameListener listener) {

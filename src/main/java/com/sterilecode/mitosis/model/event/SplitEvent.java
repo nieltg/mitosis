@@ -17,6 +17,7 @@ public class SplitEvent {
    */
   public SplitEvent(Enemy enemy) {
     this.enemy = enemy;
+    enemy.setSplitting(1);
   }
 
   /**
