@@ -19,6 +19,7 @@ import com.sterilecode.mitosis.plugin.ObjectManager;
 import com.sterilecode.mitosis.plugin.Plugin;
 import com.sterilecode.mitosis.plugin.PluginManager;
 import com.sterilecode.mitosis.view.GameDevice;
+import com.sterilecode.mitosis.view.Renderer;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
 import com.sterilecode.mitosis.view.swing.MenuDialog;
@@ -28,6 +29,7 @@ public class Main {
 
   /**
    * Program entry point.
+   *
    * @param args Command-line arguments for this program.
    */
   public static void main(String[] args) {
@@ -37,17 +39,25 @@ public class Main {
     modelManager.loadLocalBehavior();
     modelManager.loadLocalPowerUp();
 
-    // Load plugins
+    // Load custom fonts for renderer
+    Renderer.loadFonts();
+
+    // Discover plugins
     PluginManager pluginManager = PluginManager.getInstance();
-    pluginManager.discoverPluginsInDefaultDirectory();
+    try {
+      pluginManager.discoverPluginsInDefaultDirectory();
+    } catch (Exception e) {
+      System.out.println("DEBUG: Failed to discover plugins.");
+    }
 
-    System.out.println("DEBUG: Discovering plugins... ");
-
+    // Load plugins
     for (Plugin plugin : pluginManager.getPlugins()) {
-      System.out.println("DEBUG: Plugin: " + plugin.getPluginName() + " " + plugin.getPluginVersion());
+      System.out
+          .println("DEBUG: Plugin: " + plugin.getPluginName() + " " + plugin.getPluginVersion());
       try {
         plugin.activate();
       } catch (Exception e) {
+        System.out.println("DEBUG: Plugin failed to activate: " + plugin.getPluginName());
       }
     }
 
@@ -64,7 +74,8 @@ public class Main {
       menuDialog.setVisible(true);
 
       // Run GameController thread, then show it on the game frame.
-      GameController gameController = new GameController(gameDevice, 2);
+      GameController gameController = new GameController(gameDevice,
+          menuDialog.getNumberOfPlayers());
       Thread gameControllerThread = new Thread(gameController);
       gameControllerThread.start();
       gameDevice.showFrame();

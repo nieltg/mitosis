@@ -9,7 +9,7 @@ public class ViewManagerTest {
   @Test
   public void loadAndGetView() throws Exception {
     ViewManager vm = ViewManager.getInstance();
-    vm.loadViews();
+    vm.initialize();
     assertNotNull(vm.getView("sample"));
   }
 

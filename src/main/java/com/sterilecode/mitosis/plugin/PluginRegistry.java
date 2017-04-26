@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * A central storage for sharable things in plugin.
+ */
 public class PluginRegistry {
 
   private static final PluginRegistry pluginRegistryInstance = new PluginRegistry();
@@ -42,10 +45,20 @@ public class PluginRegistry {
   private PluginRegistry() {
   }
 
+  /**
+   * Get an instance of PluginRegistry.
+   *
+   * @return instance of PluginRegistry
+   */
   public static PluginRegistry getInstance() {
     return pluginRegistryInstance;
   }
 
+  /**
+   * Register supplier to PluginRegistry.
+   *
+   * @param supply A supplier
+   */
   public void registerSupplier(ObjectSupplier supply) {
     String objectId = supply.getObjectId();
 
@@ -68,6 +81,12 @@ public class PluginRegistry {
     }
   }
 
+  /**
+   * Get objects from service identifier.
+   *
+   * @param objectId Service identifier
+   * @return List of objects
+   */
   public List<Object> getObjects(String objectId) {
     List<ObjectSupplier> supplies = knownSupplies.get(objectId);
 
@@ -80,6 +99,12 @@ public class PluginRegistry {
     }
   }
 
+  /**
+   * Add listener for listening registry-related events.
+   *
+   * @param serviceId Service identifier
+   * @param listener A listener
+   */
   public void addRegistryListener(String serviceId, RegistryListener listener) {
     List<RegistryListener> listenerList = registryListeners.get(serviceId);
 
@@ -91,6 +116,12 @@ public class PluginRegistry {
     listenerList.add(listener);
   }
 
+  /**
+   * Remove listener from listening registry-related events.
+   *
+   * @param serviceId Service identifier
+   * @param listener A listener
+   */
   public void removeRegistryListener(String serviceId, RegistryListener listener) {
     List<RegistryListener> listenerList = registryListeners.get(serviceId);
 

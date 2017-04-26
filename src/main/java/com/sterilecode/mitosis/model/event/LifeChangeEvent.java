@@ -14,24 +14,22 @@ package com.sterilecode.mitosis.model.event;
  */
 
 public class LifeChangeEvent {
+
   private int lifeChange;
 
   /**
-   * Constructor.
-   *
-   * @param lifeChange
+   * Create a life change event.
+   * @param lifeChange The difference between the old life value with the current value.
    */
   public LifeChangeEvent(int lifeChange) {
     this.lifeChange = lifeChange;
   }
 
   /**
-   * getLifeChange.
-   *
-   * @return int
+   * Get the difference in live value before and after the life change event.
+   * @return The amount of life which changed.
    */
   public int getLifeChange() {
-    System.out.println("BBBBB");
     return lifeChange;
   }
 }
