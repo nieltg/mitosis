@@ -8,6 +8,7 @@ import static java.lang.Math.sin;
  */
 public class Vector {
 
+  public static final double EPS = 1e-9;
   private double vectorX;
   private double vectorY;
 
@@ -65,7 +66,7 @@ public class Vector {
    * @return boolean
    */
   public boolean equals(final Vector vector) {
-    return (vectorX == vector.vectorX && vectorY == vector.vectorY);
+    return (Math.abs(vectorX - vector.vectorX) < EPS && Math.abs(vectorY - vector.vectorY) < EPS);
   }
 
   /**
