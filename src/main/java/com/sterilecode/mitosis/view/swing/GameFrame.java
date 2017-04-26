@@ -48,6 +48,13 @@ public class GameFrame extends JFrame implements GameDevice, KeyListener {
     insets = this.getInsets();
     createBufferStrategy(BUFFER_COUNT);
 
+    resetInputState();
+  }
+
+  /**
+   * Reset the input state, set up the key map.
+   */
+  public synchronized void resetInputState() {
     // Prepare to receive input
     inputState = new InputState();
 

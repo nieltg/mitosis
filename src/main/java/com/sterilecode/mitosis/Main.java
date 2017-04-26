@@ -74,6 +74,7 @@ public class Main {
       menuDialog.setVisible(true);
 
       // Run GameController thread, then show it on the game frame.
+      gameDevice.resetInputState();
       GameController gameController = new GameController(gameDevice,
           menuDialog.getNumberOfPlayers());
       Thread gameControllerThread = new Thread(gameController);
