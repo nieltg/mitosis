@@ -48,12 +48,13 @@ public class AudioManager {
       }
 
       Files.list(walkPath).forEach(path -> {
-        String viewId = path.getFileName().toString().replaceFirst("[.][^.]+$", "");
+        String audioId = path.getFileName().toString().replaceFirst("[.][^.]+$", "");
 
         try {
           BufferedInputStream in = new BufferedInputStream(Files.newInputStream(path));
-          entities.put(viewId, new AudioEntity(AudioSystem.getAudioInputStream(in)));
+          entities.put(audioId, new AudioEntity(AudioSystem.getAudioInputStream(in)));
         } catch (Exception e) {
+          System.out.println("Sound error: " + audioId);
           e.printStackTrace();
         }
       });

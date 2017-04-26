@@ -18,19 +18,27 @@ public class AudioAction implements GameListener {
 
   @Override
   public void gameStarted(GameController controller) {
-    // TODO!
+    try {
+      AudioEntity entity = AudioManager.getInstance().getAudioEntity("start");
+      entity.getAudioClip().loop(Clip.LOOP_CONTINUOUSLY);
+      entity.play();
+    } catch (Exception ignored) {
+    }
   }
 
   @Override
   public void gameOver(GameController controller) {
-    // TODO!
+    try {
+      AudioManager.getInstance().playAudio("over");
+    } catch (Exception ignored) {
+    }
   }
 
   @Override
   public void gameObjectSpawned(GameController controller, GameObject gameObject) {
     try {
       AudioManager.getInstance().playAudio("spawn");
-    } catch (Exception e) {
+    } catch (Exception ignored) {
     }
   }
 
@@ -38,7 +46,7 @@ public class AudioAction implements GameListener {
   public void gameObjectReachedBottom(GameController controller, GameObject gameObject) {
     try {
       AudioManager.getInstance().playAudio("bottom");
-    } catch (Exception e) {
+    } catch (Exception ignored) {
   }
   }
 
@@ -46,7 +54,7 @@ public class AudioAction implements GameListener {
   public void gameObjectHit(GameController controller, GameObject gameObject) {
     try {
       AudioManager.getInstance().playAudio("hit");
-    } catch (Exception e) {
+    } catch (Exception ignored) {
     }
   }
 }
