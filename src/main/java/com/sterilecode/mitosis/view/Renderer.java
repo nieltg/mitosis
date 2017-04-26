@@ -19,6 +19,7 @@ import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.view.ViewManager.ViewNotLoadedException;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
@@ -35,8 +36,9 @@ public class Renderer {
   private int bufferY;
   private int bufferWidth;
   private int bufferHeight;
-  private Font hudCounterFont;
-  private Font hudLabelFont;
+  private static Font hudCounterFont;
+  private static Font hudLabelFont;
+  private static Font gameOverTitleFont;
 
   /**
    * Creates a renderer.
@@ -64,6 +66,8 @@ public class Renderer {
           .deriveFont(Font.BOLD, 10f);
       GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(hudLabelFont);
 
+      gameOverTitleFont = hudCounterFont.deriveFont(64f);
+
     } catch (Exception exception) {
       hudCounterFont = new Font(SANS_SERIF, Font.PLAIN, 24);
       hudLabelFont = new Font(SANS_SERIF, Font.BOLD, 10);
@@ -76,8 +80,9 @@ public class Renderer {
    * @param gameObjects List of game objects to be rendered.
    * @param life The current life (for HUD).
    * @param score The current score (for HUD).
+   * @param isGameOver True if game is over, false otherwise.
    */
-  public void render(List<GameObject> gameObjects, int life, int score) {
+  public void render(List<GameObject> gameObjects, int life, int score, boolean isGameOver) {
     try {
       Graphics2D graphics = (Graphics2D) bufferStrategy.getDrawGraphics();
 
@@ -88,6 +93,9 @@ public class Renderer {
       drawBackground(graphics);
       drawGame(gameObjects, graphics);
       drawHud(life, score, graphics);
+      if (isGameOver) {
+        drawGameOver(score, graphics);
+      }
 
       // Clean up
       graphics.dispose();
@@ -113,7 +121,7 @@ public class Renderer {
   }
 
   /**
-   * Draws game objects on the provided graphics object.s
+   * Draws game objects on the provided graphics object.
    *
    * @param gameObjects The game objects to be drawn.
    * @param graphics The graphics object which is drawn on.
@@ -146,6 +154,13 @@ public class Renderer {
     }
   }
 
+  /**
+   * Draws the life and score counters.
+   *
+   * @param life Lives remaining value.
+   * @param score The current score.
+   * @param graphics The graphics object to draw on.
+   */
   private void drawHud(Integer life, Integer score, Graphics2D graphics) {
     graphics.setColor(Color.BLACK);
     graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
@@ -162,6 +177,40 @@ public class Renderer {
     graphics.drawString(life.toString(), 120, bufferHeight - 20);
     graphics.setFont(hudLabelFont);
     graphics.drawString(" LIFE", 120, bufferHeight - 45);
+  }
+
+  private void drawHorizontallyCenteredString(String text, int leftX, int rightX, int y,
+      Graphics2D graphics) {
+    FontMetrics metrics = graphics.getFontMetrics(graphics.getFont());
+    int x = leftX + (rightX - leftX - metrics.stringWidth(text)) / 2;
+    graphics.drawString(text, x, y);
+  }
+
+  /**
+   * Draw game over screen.
+   *
+   * @param score The final score.
+   * @param graphics The graphics object to draw on.
+   */
+  private void drawGameOver(Integer score, Graphics2D graphics) {
+    graphics.setColor(Color.BLACK);
+    graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+    // Draw game over title
+    graphics.setFont(gameOverTitleFont);
+    drawHorizontallyCenteredString("game over", 0, bufferWidth, 200, graphics);
+
+    // Draw exit instruction
+    graphics.setFont(hudLabelFont);
+    drawHorizontallyCenteredString("Press [Escape] to return to the main menu", 0, bufferWidth, 250,
+        graphics);
+
+    // Draw score counter
+    graphics.setFont(hudLabelFont.deriveFont(16f));
+    drawHorizontallyCenteredString("SCORE", 0, bufferWidth, 280, graphics);
+    graphics.setFont(hudCounterFont.deriveFont(48f));
+    drawHorizontallyCenteredString(score.toString(), 0, bufferWidth, 330, graphics);
   }
 
 }

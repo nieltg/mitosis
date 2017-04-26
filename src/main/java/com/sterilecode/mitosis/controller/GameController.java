@@ -13,6 +13,7 @@ import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 import com.sterilecode.mitosis.model.gameobject.player.Player;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
+import com.sterilecode.mitosis.plugin.Plugin;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
@@ -91,7 +92,7 @@ public class GameController implements Runnable, Observer {
       detectOutOfBound();
       spawnEnemies();
       spawnPowerUps();
-      renderer.render(gameObjects, life, score);
+      renderer.render(gameObjects, life, score, false);
 
       // If we are going faster than the ideal delta time, we can wait
       long extraTime = TARGET_DELTA_TIME - (System.nanoTime() - currentTime);
@@ -262,6 +263,12 @@ public class GameController implements Runnable, Observer {
     for (Enemy enemy : enemies) {
       if (enemy.getPosition().getY() > gameDevice.getBufferHeight()) {
         --life;
+
+        // Check game over
+        if (life <= 0) {
+          isGameRunning = false;
+        }
+
         mustDelete.add(enemy);
       }
     }
@@ -329,6 +336,15 @@ public class GameController implements Runnable, Observer {
    * Ends the game - displays game over text and high score.
    */
   private void gameOver() {
-    // TODO
+    InputState inputState;
+    do {
+      inputState = gameDevice.getInputState().clone();
+      try {
+        renderer.render(gameObjects, life, score, true);
+        Thread.sleep(TARGET_DELTA_TIME / NANOSECONDS_IN_A_MILLISECOND);
+      } catch (InterruptedException e) {
+        // Ignore interrupts, doesn't matter anyway.
+      }
+    } while (!inputState.isMenuKeyPressed());
   }
 }
