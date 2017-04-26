@@ -1,9 +1,10 @@
 package com.sterilecode.mitosis.common;
 
-import org.junit.Test;
-import java.lang.Math;
+import static com.sterilecode.mitosis.common.Vector.EPS;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -13,65 +14,81 @@ import static org.junit.Assert.*;
  * - 13515071 [K-02] Daniel Pintara
  * - 13515093 [K-03] Reinaldo Ignatius
  * ***
- * File name         : ${NAME}.java
+ * File name         : VectorTest.java
  * Created at        : 4/24/17
- * Last modified at  : 4/24/17
+ * Last modified at  : 4/26/17
  */
-public class VectorTest {
 
-  Vector v1 = new Vector();
-  Vector v2 = new Vector(3, 4);
-  private static final double EPS = 1e-9;
+public class VectorTest {
 
   @Test
   public void getX() throws Exception {
-    assertEquals(0.0d, v1.getX(), EPS);
+    Vector v1 = new Vector();
+    assertEquals(0.0, v1.getX(), EPS);
+    Vector v2 = new Vector(2, 3);
+    assertEquals(2.0, v2.getX(), EPS);
   }
 
   @Test
   public void getY() throws Exception {
-    assertEquals(0.0d, v1.getY(), EPS);
+    Vector v1 = new Vector();
+    assertEquals(0.0, v1.getY(), EPS);
+    Vector v2 = new Vector(2, 3);
+    assertEquals(3.0, v2.getY(), EPS);
   }
 
   @Test
   public void setX() throws Exception {
-    v1.setX(3.0d);
-    assertEquals(3.0d, v1.getX(), EPS);
+    Vector v1 = new Vector();
+    v1.setX(3.0);
+    assertEquals(3.0, v1.getX(), EPS);
   }
 
   @Test
   public void setY() throws Exception {
-    v1.setY(4.0d);
-    assertEquals(4.0d, v1.getY(), EPS);
+    Vector v1 = new Vector();
+    v1.setY(3.0);
+    assertEquals(3.0, v1.getY(), EPS);
   }
 
   @Test
   public void equals() throws Exception {
-    Vector v3 = new Vector();
-    assertTrue(v1.equals(v3));
+    Vector v1 = new Vector();
+    Vector v2 = new Vector();
+    assertTrue(v1.equals(v2));
+    v1.setX(5.0);
+    assertTrue(!v1.equals(v2));
+    v2.setX(5.0);
+    assertTrue(v1.equals(v2));
+    v1.setY(-2.34);
+    assertTrue(!v1.equals(v2));
+    v2.setY(-2.34);
+    assertTrue(v1.equals(v2));
   }
 
   @Test
   public void add() throws Exception {
-    Vector v3 = new Vector();
-    v3 = v1.add(v2);
-    assertEquals(3, v3.getX(), EPS);
+    Vector v1 = new Vector(3, 7);
+    Vector v2 = new Vector(-2, 1);
+    Vector v3 = v1.add(v2);
+    assertEquals(1, v3.getX(), EPS);
+    assertEquals(8, v3.getY(), EPS);
   }
 
   @Test
   public void multiply() throws Exception {
-    Vector v3 = new Vector();
-    v3 = v2.multiply(3);
-    assertEquals(9, v3.getX(), EPS);
-    assertEquals(12, v3.getY(), EPS);
+    Vector v1 = new Vector(3, 7);
+    Vector v3 = v1.multiply(-2.0);
+    assertEquals(-6.0, v3.getX(), EPS);
+    assertEquals(-14.0, v3.getY(), EPS);
   }
 
   @Test
   public void rotate() throws Exception {
-    Vector v3 = new Vector();
-    v3 = v2.rotate(0.5 * Math.PI);
-    assertEquals(-4, v3.getX(), EPS);
-    assertEquals(3, v3.getY(), EPS);
+    Vector v1 = new Vector(3, 7);
+    Vector v3 = v1.rotate(Math.PI / 2.0);
+    assertEquals(-7.0, v3.getX(), EPS);
+    assertEquals(3.0, v3.getY(), EPS);
   }
 
 }

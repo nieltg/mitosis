@@ -3,6 +3,7 @@ package com.sterilecode.mitosis.plugin;
 import com.sterilecode.mitosis.plugin.client.RegistrationToken;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * A class for supplying objects to the plugin registry.
@@ -29,7 +30,8 @@ public class ObjectSupplier implements RegistrationToken {
    * Notify listeners that this supplier is going to be disposed.
    */
   protected void notifyDisposal() {
-    disposalListeners.forEach(listener -> listener.objectDisposed(this));
+    new CopyOnWriteArrayList<>(disposalListeners)
+        .forEach(listener -> listener.objectDisposed(this));
   }
 
   /**

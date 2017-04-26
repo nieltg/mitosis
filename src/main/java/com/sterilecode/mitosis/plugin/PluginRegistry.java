@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 /**
@@ -29,8 +30,10 @@ public class PluginRegistry {
         if (supplyList.remove(source)) {
           List<RegistryListener> listenerList = registryListeners.get(objectId);
 
-          listenerList.forEach(listener ->
-              listener.registryObjectRemoved(objectId, source.getObject()));
+          if (listenerList != null) {
+            new CopyOnWriteArrayList<>(listenerList).forEach(listener ->
+                listener.registryObjectRemoved(objectId, source.getObject()));
+          }
         }
 
         if (supplyList.isEmpty()) {
@@ -77,7 +80,8 @@ public class PluginRegistry {
     List<RegistryListener> listenerList = registryListeners.get(objectId);
 
     if (listenerList != null) {
-      listenerList.forEach(listener -> listener.registryObjectAdded(objectId, supply.getObject()));
+      new CopyOnWriteArrayList<>(listenerList)
+          .forEach(listener -> listener.registryObjectAdded(objectId, supply.getObject()));
     }
   }
 
