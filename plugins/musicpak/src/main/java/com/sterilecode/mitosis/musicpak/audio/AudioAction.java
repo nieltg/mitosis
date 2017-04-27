@@ -9,11 +9,11 @@ public class AudioAction implements GameListener {
 
   private static final AudioAction audioActionInstance = new AudioAction();
 
-  public static AudioAction getInstance() {
-    return audioActionInstance;
+  private AudioAction() {
   }
 
-  private AudioAction() {
+  public static AudioAction getInstance() {
+    return audioActionInstance;
   }
 
   @Override
@@ -49,7 +49,7 @@ public class AudioAction implements GameListener {
     try {
       AudioManager.getInstance().playAudio("bottom");
     } catch (Exception ignored) {
-  }
+    }
   }
 
   @Override

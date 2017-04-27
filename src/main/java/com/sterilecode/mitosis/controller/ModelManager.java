@@ -39,6 +39,15 @@ public class ModelManager {
   }
 
   /**
+   * getInstance.
+   *
+   * @return ModelManager
+   */
+  public static ModelManager getInstance() {
+    return modelManagerInstance;
+  }
+
+  /**
    * Load all local classes that extend Enemy.
    */
   public void loadLocalEnemies() {
@@ -87,14 +96,5 @@ public class ModelManager {
   public List<Class<? extends PowerUp>> getListOfPowerUp() {
     return ObjectManager.getInstance().getObjects(POWER_UP_SERVICE_ID)
         .stream().map(x -> (Class<? extends PowerUp>) x).collect(Collectors.toList());
-  }
-
-  /**
-   * getInstance.
-   *
-   * @return ModelManager
-   */
-  public static ModelManager getInstance() {
-    return modelManagerInstance;
   }
 }

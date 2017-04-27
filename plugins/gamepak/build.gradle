@@ -7,14 +7,14 @@ dependencies {
 
 jar {
     manifest {
-        attributes (
-            'Sterilecode-Mitosis-Plugin-Name':
-                'GamePak',
-            'Sterilecode-Mitosis-Plugin-Version':
-                'v0.1',
-            
-            'Sterilecode-Mitosis-Plugin-Class':
-                'com.sterilecode.mitosis.gamepak.GamePakPlugin'
+        attributes(
+                'Sterilecode-Mitosis-Plugin-Name':
+                        'GamePak',
+                'Sterilecode-Mitosis-Plugin-Version':
+                        'v0.1',
+
+                'Sterilecode-Mitosis-Plugin-Class':
+                        'com.sterilecode.mitosis.gamepak.GamePakPlugin'
         )
     }
 }

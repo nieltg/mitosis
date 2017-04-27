@@ -6,7 +6,6 @@ import com.sterilecode.mitosis.musicpak.audio.AudioAction;
 import com.sterilecode.mitosis.musicpak.audio.AudioManager;
 import com.sterilecode.mitosis.plugin.client.IPlugin;
 import com.sterilecode.mitosis.plugin.client.IPluginRegistry;
-import com.sterilecode.mitosis.plugin.client.RegistrationToken;
 import com.sterilecode.mitosis.plugin.client.RegistryListener;
 
 public class MusicPakPlugin implements IPlugin {

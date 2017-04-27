@@ -1,6 +1,6 @@
 package com.sterilecode.mitosis.view;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 

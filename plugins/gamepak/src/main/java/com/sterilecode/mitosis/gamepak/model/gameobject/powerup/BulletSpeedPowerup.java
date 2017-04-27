@@ -12,6 +12,7 @@ public class BulletSpeedPowerup extends PowerUp {
 
   /**
    * Constructor.
+   *
    * @param position Creates a bullet speed power up.
    */
   public BulletSpeedPowerup(Vector position) {
@@ -21,6 +22,7 @@ public class BulletSpeedPowerup extends PowerUp {
 
   /**
    * Applies this power up's effects to a player.
+   *
    * @param player The player on which to apply this power up's effects.
    */
   public void applyPowerUp(Player player) {

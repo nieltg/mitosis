@@ -18,7 +18,7 @@ mainClassName = 'com.sterilecode.mitosis.Main'
 
 def versions = [
         checkstyle: '7.6.1',
-        junit: '4.12'
+        junit     : '4.12'
 ]
 
 repositories {
@@ -31,7 +31,7 @@ configurations {
 
 dependencies {
     testCompile "junit:junit:${versions.junit}"
-    checkstyleConfig ("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
+    checkstyleConfig("com.puppycrawl.tools:checkstyle:${versions.checkstyle}") {
         transitive = false
     }
 }

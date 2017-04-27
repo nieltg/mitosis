@@ -36,6 +36,7 @@ public class Bullet extends GameObject {
 
   /**
    * Return this bullet's owning player (the player that fired this bullet).
+   *
    * @return Player
    */
   public Player getOwner() {

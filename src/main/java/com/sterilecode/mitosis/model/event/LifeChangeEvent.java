@@ -19,6 +19,7 @@ public class LifeChangeEvent {
 
   /**
    * Create a life change event.
+   *
    * @param lifeChange The difference between the old life value with the current value.
    */
   public LifeChangeEvent(int lifeChange) {
@@ -27,6 +28,7 @@ public class LifeChangeEvent {
 
   /**
    * Get the difference in live value before and after the life change event.
+   *
    * @return The amount of life which changed.
    */
   public int getLifeChange() {

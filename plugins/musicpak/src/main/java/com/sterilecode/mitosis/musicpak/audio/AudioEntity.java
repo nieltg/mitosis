@@ -7,6 +7,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 
 public class AudioEntity {
+
   private final Clip audioClip;
 
   AudioEntity(AudioInputStream au) throws LineUnavailableException, IOException {

@@ -58,15 +58,17 @@ public class ViewManager {
     }
   };
 
-  public class ViewNotLoadedException extends Exception {
-
-    public ViewNotLoadedException(String msg) {
-      super(msg);
-    }
-  }
-
   private ViewManager() {
     // Prevent class instantiation as this is a singleton
+  }
+
+  /**
+   * Get an instance of ViewManager.
+   *
+   * @return An instance of ViewManager.
+   */
+  public static ViewManager getInstance() {
+    return viewManagerInstance;
   }
 
   /**
@@ -123,12 +125,10 @@ public class ViewManager {
     return viewImage;
   }
 
-  /**
-   * Get an instance of ViewManager.
-   *
-   * @return An instance of ViewManager.
-   */
-  public static ViewManager getInstance() {
-    return viewManagerInstance;
+  public class ViewNotLoadedException extends Exception {
+
+    public ViewNotLoadedException(String msg) {
+      super(msg);
+    }
   }
 }

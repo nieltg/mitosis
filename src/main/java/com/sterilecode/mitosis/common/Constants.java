@@ -17,6 +17,7 @@ package com.sterilecode.mitosis.common;
  * Contains constants that are common in the project.
  */
 public class Constants {
+
   public static final long NANOSECONDS_IN_A_SECOND = 1000000000;
   public static final long NANOSECONDS_IN_A_MILLISECOND = 1000000;
   public static final String ENEMY_SERVICE_ID = "Enemy";

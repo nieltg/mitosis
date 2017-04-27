@@ -38,19 +38,19 @@ public class Vector {
   }
 
   /**
+   * setX.
+   */
+  public void setX(final double vectorX) {
+    this.vectorX = vectorX;
+  }
+
+  /**
    * getY.
    *
    * @return vectorY
    */
   public double getY() {
     return vectorY;
-  }
-
-  /**
-   * setX.
-   */
-  public void setX(final double vectorX) {
-    this.vectorX = vectorX;
   }
 
   /**

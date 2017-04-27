@@ -51,6 +51,7 @@ public class Player extends GameObject {
 
   /**
    * Increases this player's bullet speed.
+   *
    * @param increment The amount by which to increase the bullet speed.
    */
   public void increaseBulletSpeed(int increment) {
@@ -59,6 +60,7 @@ public class Player extends GameObject {
 
   /**
    * Player shoot action.
+   *
    * @param currentTime The current game time in nanoseconds.
    */
   public void shoot(long currentTime) {

@@ -16,6 +16,7 @@ package com.sterilecode.mitosis.controller;
 import java.util.prefs.Preferences;
 
 public class HighScoreController {
+
   private HighScoreController highScoreControllerInstance = new HighScoreController();
   private Preferences highScoreMemo;
   private Integer highScore;
@@ -30,6 +31,7 @@ public class HighScoreController {
 
   /**
    * Checks whether a score is the new high score.
+   *
    * @param newScore The new score to be checked.
    */
   public void checkHighScore(int newScore) {
