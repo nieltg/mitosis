@@ -2,7 +2,6 @@ package com.sterilecode.mitosis.model.gameobject.enemy;
 
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.straightbehavior.StraightBehavior;
-import com.sterilecode.mitosis.model.event.SplitEvent;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming

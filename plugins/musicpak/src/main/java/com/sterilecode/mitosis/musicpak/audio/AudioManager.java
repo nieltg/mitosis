@@ -1,6 +1,5 @@
 package com.sterilecode.mitosis.musicpak.audio;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URI;
@@ -13,11 +12,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioManager {
 
@@ -26,11 +21,11 @@ public class AudioManager {
 
   private final Map<String, AudioEntity> entities = new HashMap<>();
 
-  public static AudioManager getInstance() {
-    return audioManagerInstance;
+  private AudioManager() {
   }
 
-  private AudioManager() {
+  public static AudioManager getInstance() {
+    return audioManagerInstance;
   }
 
   public void loadSounds() throws IOException {

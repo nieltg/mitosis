@@ -31,17 +31,18 @@ import java.util.List;
 
 public class Renderer {
 
+  private static Font hudCounterFont;
+  private static Font hudLabelFont;
+  private static Font gameOverTitleFont;
   private BufferStrategy bufferStrategy;
   private int bufferX;
   private int bufferY;
   private int bufferWidth;
   private int bufferHeight;
-  private static Font hudCounterFont;
-  private static Font hudLabelFont;
-  private static Font gameOverTitleFont;
 
   /**
    * Creates a renderer.
+   *
    * @param gameDevice The game device on which buffer this renderer will draw on.
    */
   public Renderer(GameDevice gameDevice) {

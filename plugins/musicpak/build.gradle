@@ -7,16 +7,16 @@ dependencies {
 
 jar {
     manifest {
-		attributes (
-			'Sterilecode-Mitosis-Plugin-Name':
-				'MusicPak',
-			'Sterilecode-Mitosis-Plugin-Version':
-				'v0.1',
-			
-			'Sterilecode-Mitosis-Plugin-Class':
-				'com.sterilecode.mitosis.musicpak.MusicPakPlugin'
-		)
-	}
+        attributes(
+                'Sterilecode-Mitosis-Plugin-Name':
+                        'MusicPak',
+                'Sterilecode-Mitosis-Plugin-Version':
+                        'v0.1',
+
+                'Sterilecode-Mitosis-Plugin-Class':
+                        'com.sterilecode.mitosis.musicpak.MusicPakPlugin'
+        )
+    }
 }
 
 sourceCompatibility = "1.8"

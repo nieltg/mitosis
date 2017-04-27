@@ -19,6 +19,7 @@ package com.sterilecode.mitosis.view;
  * To use safely, it is recommended to clone this object before reading.
  */
 public class InputState implements Cloneable {
+
   private boolean menuKeyPressed = false;
   private boolean player1ShootKeyPressed = false;
   private boolean player2ShootKeyPressed = false;

@@ -18,6 +18,7 @@ public class MenuDialog extends JDialog {
 
   /**
    * Creates a new main menu dialog.
+   *
    * @param parent The dialog parent frame of this menu. Pass null to use a global, shared parent.
    */
   public MenuDialog(JFrame parent) {

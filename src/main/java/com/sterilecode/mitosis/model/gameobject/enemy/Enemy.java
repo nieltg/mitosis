@@ -1,13 +1,12 @@
 package com.sterilecode.mitosis.model.gameobject.enemy;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
+
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.event.SplitEvent;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
-
 import java.util.Random;
-
-import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 /**
  * An abstract class that is used to represent enemy.
@@ -74,7 +73,7 @@ public abstract class Enemy extends GameObject {
     if (splitting == 1 || splitting == -1) {
       splitSpeed -= 0.2;
       setPosition(getPosition().add(
-                          new Vector(splitting * splitSpeed * deltaTime / NANOSECONDS_IN_A_SECOND, 0)));
+          new Vector(splitting * splitSpeed * deltaTime / NANOSECONDS_IN_A_SECOND, 0)));
       if (splitSpeed <= 0.0) {
         splitting = 0;
         splitSpeed = 0.0;
@@ -90,7 +89,8 @@ public abstract class Enemy extends GameObject {
     try {
       this.setChanged();
       setSplitting(-1);
-      notifyObservers(new SplitEvent(this.getClass().getConstructor(Vector.class).newInstance(position)));
+      notifyObservers(
+          new SplitEvent(this.getClass().getConstructor(Vector.class).newInstance(position)));
     } catch (Exception exception) {
       System.out.println(exception.getMessage());
       exception.printStackTrace();

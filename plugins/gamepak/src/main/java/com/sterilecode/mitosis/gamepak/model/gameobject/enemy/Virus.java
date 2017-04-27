@@ -11,6 +11,7 @@ public class Virus extends Enemy {
 
   /**
    * Creates a virus.
+   *
    * @param position The starting position of this virus.
    */
   public Virus(Vector position) {

@@ -78,7 +78,7 @@ public class Main {
       GameController gameController = new GameController(gameDevice,
           menuDialog.getNumberOfPlayers());
 
-      RegistrationToken registrationToken = ObjectManager.getInstance()
+      final RegistrationToken registrationToken = ObjectManager.getInstance()
           .registerObject(Constants.GAME_CONTROLLER_PROVIDER_ID, gameController);
 
       Thread gameControllerThread = new Thread(gameController);

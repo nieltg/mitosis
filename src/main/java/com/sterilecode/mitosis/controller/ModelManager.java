@@ -39,6 +39,15 @@ public class ModelManager {
   }
 
   /**
+   * getInstance.
+   *
+   * @return ModelManager
+   */
+  public static ModelManager getInstance() {
+    return modelManagerInstance;
+  }
+
+  /**
    * Load all local classes that extend Enemy.
    */
   public void loadLocalEnemies() {
@@ -62,7 +71,7 @@ public class ModelManager {
   /**
    * Get a list of all class that extend Enemy.
    *
-   * @return List&lt;Class&lt;? extends Enemy&rt;&rt;
+   * @return List;Class;? extends Enemy;;
    */
   public List<Class<? extends Enemy>> getListOfEnemy() {
     return ObjectManager.getInstance().getObjects(ENEMY_SERVICE_ID)
@@ -72,7 +81,7 @@ public class ModelManager {
   /**
    * Get a list of all class that extend Behavior.
    *
-   * @return List&lt;Class&lt;? extends Behavior&rt;&rt;
+   * @return List;Class;? extends Behavior;;
    */
   public List<Class<? extends Behavior>> getListOfBehavior() {
     return ObjectManager.getInstance().getObjects(BEHAVIOR_SERVICE_ID)
@@ -82,19 +91,10 @@ public class ModelManager {
   /**
    * Get a list of all class that extend PowerUp.
    *
-   * @return List&lt;Class&lt;? extends PowerUp&rt;&rt;
+   * @return List;Class;? extends PowerUp;;
    */
   public List<Class<? extends PowerUp>> getListOfPowerUp() {
     return ObjectManager.getInstance().getObjects(POWER_UP_SERVICE_ID)
         .stream().map(x -> (Class<? extends PowerUp>) x).collect(Collectors.toList());
-  }
-
-  /**
-   * getInstance.
-   *
-   * @return ModelManager
-   */
-  public static ModelManager getInstance() {
-    return modelManagerInstance;
   }
 }
