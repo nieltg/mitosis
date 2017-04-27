@@ -85,13 +85,13 @@ public class Main {
       gameControllerThread.start();
       gameDevice.showFrame();
 
-      while (gameController.isThreadRunning()) {
+       do {
         try {
           gameControllerThread.join();
         } catch (InterruptedException e) {
           // Ignore if interrupted.
         }
-      }
+      } while (gameController.isThreadRunning());
 
       registrationToken.unregister();
       gameDevice.hideFrame();
