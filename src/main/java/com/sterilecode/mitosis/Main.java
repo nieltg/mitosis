@@ -85,7 +85,7 @@ public class Main {
       gameControllerThread.start();
       gameDevice.showFrame();
 
-       do {
+      do {
         try {
           gameControllerThread.join();
         } catch (InterruptedException e) {
