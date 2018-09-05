@@ -2,7 +2,6 @@ package com.sterilecode.mitosis.model.gameobject.enemy;
 
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.behavior.straightbehavior.StraightBehavior;
-import com.sterilecode.mitosis.model.event.SplitEvent;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -18,7 +17,7 @@ import com.sterilecode.mitosis.model.event.SplitEvent;
  */
 
 /**
- * Enemy that has StraightBehavior
+ * Enemy Bacteria, has StraightBehavior.
  */
 public class Bacteria extends Enemy {
 
@@ -26,15 +25,7 @@ public class Bacteria extends Enemy {
    * Constructor.
    */
   public Bacteria(Vector position) {
-    super(position, new Vector(0, 10), 5, "Bacteria");
+    super(position, new Vector(0, 20), 5, "Bacteria");
     behavior = new StraightBehavior(this);
-  }
-
-  /**
-   * split.
-   */
-  public void split() {
-    this.setChanged();
-    notifyObservers(new SplitEvent(new Bacteria(position)));
   }
 }

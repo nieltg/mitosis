@@ -2,13 +2,8 @@ package com.sterilecode.mitosis.model.behavior.straightbehavior;
 
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
-import com.sterilecode.mitosis.common.Constants;
 import com.sterilecode.mitosis.model.behavior.Behavior;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
-
-/**
- * Created by Reinaldo on 4/22/2017.
- */
 
 /**
  * A behavior that moves its owner straight down the screen.

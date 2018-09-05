@@ -13,43 +13,88 @@ package com.sterilecode.mitosis;
  * Last modified at  : 4/24/17
  */
 
+import com.sterilecode.mitosis.common.Constants;
 import com.sterilecode.mitosis.controller.GameController;
-import com.sterilecode.mitosis.view.GameDevice;
+import com.sterilecode.mitosis.controller.ModelManager;
+import com.sterilecode.mitosis.plugin.ObjectManager;
+import com.sterilecode.mitosis.plugin.Plugin;
+import com.sterilecode.mitosis.plugin.PluginManager;
+import com.sterilecode.mitosis.plugin.client.RegistrationToken;
+import com.sterilecode.mitosis.view.Renderer;
 import com.sterilecode.mitosis.view.ViewManager;
 import com.sterilecode.mitosis.view.swing.GameFrame;
-import java.io.IOException;
+import com.sterilecode.mitosis.view.swing.MenuDialog;
 
 public class Main {
 
   /**
    * Program entry point.
+   *
    * @param args Command-line arguments for this program.
    */
   public static void main(String[] args) {
+    // Load local models
+    ModelManager modelManager = ModelManager.getInstance();
+    modelManager.loadLocalEnemies();
+    modelManager.loadLocalBehavior();
+    modelManager.loadLocalPowerUp();
+
+    // Load custom fonts for renderer
+    Renderer.loadFonts();
+
+    // Discover plugins
+    PluginManager pluginManager = PluginManager.getInstance();
+    try {
+      pluginManager.discoverPluginsInDefaultDirectory();
+    } catch (Exception e) {
+      System.out.println("DEBUG: Failed to discover plugins.");
+    }
+
+    // Load plugins
+    for (Plugin plugin : pluginManager.getPlugins()) {
+      System.out
+          .println("DEBUG: Plugin: " + plugin.getPluginName() + " " + plugin.getPluginVersion());
+      try {
+        plugin.activate();
+      } catch (Exception e) {
+        System.out.println("DEBUG: Plugin failed to activate: " + plugin.getPluginName());
+      }
+    }
 
     // Load and cache views
-    try {
-      ViewManager.getInstance().loadViews();
-    } catch (IOException exception) {
-      System.out.println(exception.getMessage());
-      exception.printStackTrace();
-      return;
+    ViewManager.getInstance().initialize();
+
+    // Initialize game device, show menu dialog
+    GameFrame gameDevice = new GameFrame();
+
+    // Loop between main menu and game, only exiting from main menu or if this thread is interrupted
+    while (true) {
+
+      MenuDialog menuDialog = new MenuDialog(gameDevice);
+      menuDialog.setVisible(true);
+
+      // Run GameController thread, then show it on the game frame.
+      gameDevice.resetInputState();
+      GameController gameController = new GameController(gameDevice,
+          menuDialog.getNumberOfPlayers());
+
+      final RegistrationToken registrationToken = ObjectManager.getInstance()
+          .registerObject(Constants.GAME_CONTROLLER_PROVIDER_ID, gameController);
+
+      Thread gameControllerThread = new Thread(gameController);
+      gameControllerThread.start();
+      gameDevice.showFrame();
+
+      do {
+        try {
+          gameControllerThread.join();
+        } catch (InterruptedException e) {
+          // Ignore if interrupted.
+        }
+      } while (gameController.isThreadRunning());
+
+      registrationToken.unregister();
+      gameDevice.hideFrame();
     }
-
-    // Initialize and show Swing UI
-    GameDevice gameDevice = new GameFrame();
-
-    // TODO: show main menu
-
-    // DEVELOPMENT: run GameController thread and wait for it to end
-    GameController gameController = new GameController(gameDevice, 2);
-    Thread gameControllerThread = new Thread(gameController);
-    gameControllerThread.start();
-    try {
-      gameControllerThread.join();
-    } catch (InterruptedException exception) {
-      // Ignore interrupts
-    }
-
   }
 }

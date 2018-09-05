@@ -2,25 +2,27 @@ package com.sterilecode.mitosis.controller;
 
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_MILLISECOND;
 import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
+import static java.lang.Math.pow;
 
 import com.sterilecode.mitosis.common.Vector;
+import com.sterilecode.mitosis.model.event.LifeChangeEvent;
 import com.sterilecode.mitosis.model.event.ShootEvent;
 import com.sterilecode.mitosis.model.event.SplitEvent;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.bullet.Bullet;
-import com.sterilecode.mitosis.model.gameobject.enemy.Bacteria;
 import com.sterilecode.mitosis.model.gameobject.enemy.Enemy;
 import com.sterilecode.mitosis.model.gameobject.player.Player;
-import com.sterilecode.mitosis.model.gameobject.powerup.ExtraLifePowerUp;
 import com.sterilecode.mitosis.model.gameobject.powerup.PowerUp;
 import com.sterilecode.mitosis.view.GameDevice;
 import com.sterilecode.mitosis.view.InputState;
 import com.sterilecode.mitosis.view.Renderer;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
-
-import static java.lang.Math.pow;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -37,8 +39,11 @@ import static java.lang.Math.pow;
 
 public class GameController implements Runnable, Observer {
 
-  private final long TARGET_FPS = 60;
-  private final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
+  private static final long TARGET_FPS = 60;
+  private static final long TARGET_DELTA_TIME = NANOSECONDS_IN_A_SECOND / TARGET_FPS;
+  private static final int INITIAL_HEALTH = 3;
+
+  private final List<GameListener> gameListeners = new ArrayList<>();
 
   private GameDevice gameDevice;
   private Renderer renderer;
@@ -47,12 +52,15 @@ public class GameController implements Runnable, Observer {
   private double fps;
   private long currentTime;
   private boolean isGameRunning;
+  private boolean isThreadRunning;
   private List<Player> players;
   private long timeSinceLastEnemySpawn;
   private long timeSinceLastPowerUpSpawn;
+  private int life;
 
   /**
    * Creates a new GameController, ready to run.
+   *
    * @param gameDevice An object which provides game IO and display.
    * @param playerCount Number of players for this game (1 or 2 players only).
    */
@@ -69,23 +77,26 @@ public class GameController implements Runnable, Observer {
    */
   @Override
   public void run() {
-
     System.out.println("Starting game loop...");
+    new CopyOnWriteArrayList<>(gameListeners).forEach(listener -> listener.gameStarted(this));
+    isThreadRunning = true;
 
     // The game loop - variable delta time
     while (isGameRunning) {
       long newTime = System.nanoTime();
       long deltaTime = newTime - currentTime;
       currentTime = newTime;
+
       fps = (double) NANOSECONDS_IN_A_SECOND / (double) deltaTime;
 
       processInput();
       updatePhysics(deltaTime);
       detectCollision();
+      detectReachedBottom();
       detectOutOfBound();
       spawnEnemies();
       spawnPowerUps();
-      renderer.render(gameObjects, players, score);
+      renderer.render(gameObjects, life, score, false);
 
       // If we are going faster than the ideal delta time, we can wait
       long extraTime = TARGET_DELTA_TIME - (System.nanoTime() - currentTime);
@@ -103,6 +114,7 @@ public class GameController implements Runnable, Observer {
 
   /**
    * Handles events raised by game objects.
+   *
    * @param o the observable object.
    */
   @Override
@@ -111,11 +123,14 @@ public class GameController implements Runnable, Observer {
       gameObjects.add(((ShootEvent) arg).getBullet());
     } else if (arg instanceof SplitEvent) {
       gameObjects.add(((SplitEvent) arg).getEnemy());
+    } else if (arg instanceof LifeChangeEvent) {
+      life += ((LifeChangeEvent) arg).getLifeChange();
     }
   }
 
   /**
    * Gets the number of frames rendered per second.
+   *
    * @return Frames per second.
    */
   public double getFps() {
@@ -133,14 +148,15 @@ public class GameController implements Runnable, Observer {
     for (int i = 0; i < playerCount; i++) {
       int centerX = gameDevice.getBufferWidth() / 2;
       int centerY = gameDevice.getBufferHeight() / 2;
-      final int playerSpacing = 100;
-      int offsetX = - (playerCount - 1) * playerSpacing / 2 + i * playerSpacing;
+      final int playerSpacing = 300;
+      int offsetX = -(playerCount - 1) * playerSpacing / 2 + i * playerSpacing;
       Player player = new Player(new Vector(centerX + offsetX, centerY));
       player.addObserver(this);
       gameObjects.add(player);
       players.add(player);
     }
 
+    life = INITIAL_HEALTH;
     score = 0;
     fps = 0.0;
     currentTime = System.nanoTime();
@@ -191,67 +207,92 @@ public class GameController implements Runnable, Observer {
 
   /**
    * Update game objects' physical states (position, velocity, etc.) according to deltaTime.
+   *
    * @param deltaTime Time elapsed between last frame and current frame.
    */
   private void updatePhysics(long deltaTime) {
-    for (GameObject gameObject : gameObjects) {
+    for (GameObject gameObject : new CopyOnWriteArrayList<>(gameObjects)) {
       gameObject.update(deltaTime);
     }
   }
 
-	/**
-	 * deleteObjects.
-	 * Remove all objects from gameObjects that is in mustDelete
-	 * @param mustDelete
-	 */
+  /**
+   * deleteObjects.
+   * Remove all objects from gameObjects that is in mustDelete
+   */
   private void deleteObjects(List<GameObject> mustDelete) {
-  	for (GameObject delete : mustDelete) {
-  		for (GameObject gameObject : gameObjects) {
-  			if (delete == gameObject) {
-  				gameObjects.remove(gameObject);
-  				break;
-			  }
-		  }
-	  }
+    for (GameObject delete : mustDelete) {
+      for (GameObject gameObject : gameObjects) {
+        if (delete == gameObject) {
+          gameObjects.remove(gameObject);
+          break;
+        }
+      }
+    }
   }
 
   /**
    * Checks game objects for collision (particularly bullets, powerups and enemies).
    */
   private void detectCollision() {
-    List<GameObject> enemiesAndPowerUps = gameObjects.stream().filter(x -> x instanceof Enemy || x instanceof PowerUp)
-				                                  .collect(Collectors.toList());
+    List<GameObject> enemiesAndPowerUps = gameObjects.stream()
+        .filter(x -> x instanceof Enemy || x instanceof PowerUp)
+        .collect(Collectors.toList());
     List<Bullet> bullets = gameObjects.stream().filter(x -> x instanceof Bullet)
-				                        .map(y -> (Bullet) y).collect(Collectors.toList());
+        .map(y -> (Bullet) y).collect(Collectors.toList());
     List<GameObject> mustDelete = new ArrayList<>();
     for (Bullet bullet : bullets) {
-    	for (GameObject enemyOrPowerUp : enemiesAndPowerUps) {
-				if (pow(bullet.getSize() - enemyOrPowerUp.getSize(), 2)
-						<= pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
-						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
-						&& pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
-						+ pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
-			 			<= pow(bullet.getSize() + enemyOrPowerUp.getSize(), 2)) {
-					if (enemyOrPowerUp instanceof PowerUp) {
-						((PowerUp) enemyOrPowerUp).applyPowerUp(bullet.getOwner());
-					}
-					mustDelete.add(enemyOrPowerUp);
-		    }
-	    }
+      for (GameObject enemyOrPowerUp : enemiesAndPowerUps) {
+        if (pow(bullet.getSize() - enemyOrPowerUp.getSize(), 2)
+            <= pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
+            + pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
+            && pow(bullet.getPosition().getX() - enemyOrPowerUp.getPosition().getX(), 2)
+            + pow(bullet.getPosition().getY() - enemyOrPowerUp.getPosition().getY(), 2)
+            <= pow(bullet.getSize() + enemyOrPowerUp.getSize(), 2)) {
+          if (enemyOrPowerUp instanceof PowerUp) {
+            ((PowerUp) enemyOrPowerUp).applyPowerUp(bullet.getOwner());
+          }
+          ++score;
+          mustDelete.add(enemyOrPowerUp);
+          new CopyOnWriteArrayList<>(gameListeners)
+              .forEach(listener -> listener.gameObjectHit(this, enemyOrPowerUp));
+        }
+      }
     }
     deleteObjects(mustDelete);
   }
 
-	/**
-	 * Check if gameobjects' position are out of bound.
-	 */
-	private void detectOutOfBound() {
-  	List<GameObject> mustDelete = new ArrayList<>();
-	  for (GameObject gameObject : gameObjects) {
-	    if (gameObject.getPosition().getX() < 0 || gameObject.getPosition().getY() < 0
+  private void detectReachedBottom() {
+    List<Enemy> enemies = gameObjects.stream().filter(x -> x instanceof Enemy).map(y -> (Enemy) y)
+        .collect(Collectors.toList());
+    List<GameObject> mustDelete = new ArrayList<>();
+    for (Enemy enemy : enemies) {
+      if (enemy.getPosition().getY() > gameDevice.getBufferHeight()) {
+        --life;
+
+        // Check game over
+        if (life <= 0) {
+          isGameRunning = false;
+        }
+
+        mustDelete.add(enemy);
+        new CopyOnWriteArrayList<>(gameListeners)
+            .forEach(listener -> listener.gameObjectReachedBottom(this, enemy));
+      }
+    }
+    deleteObjects(mustDelete);
+  }
+
+  /**
+   * Check if gameobjects' position are out of bound.
+   */
+  private void detectOutOfBound() {
+    List<GameObject> mustDelete = new ArrayList<>();
+    for (GameObject gameObject : gameObjects) {
+      if (gameObject.getPosition().getX() < 0 || gameObject.getPosition().getY() < 0
           || gameObject.getPosition().getX() > gameDevice.getBufferWidth()
           || gameObject.getPosition().getY() > gameDevice.getBufferHeight()) {
-	      mustDelete.add(gameObject);
+        mustDelete.add(gameObject);
       }
     }
     deleteObjects((mustDelete));
@@ -261,19 +302,21 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns enemies.
    */
   private void spawnEnemies() {
-    if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_MILLISECOND * 500) {
+    if (currentTime - timeSinceLastEnemySpawn > NANOSECONDS_IN_A_SECOND) {
       timeSinceLastEnemySpawn = currentTime;
-      List<Class<? extends Enemy>> enemyClasses = new ArrayList<>();
-      int classCount = 0;
-      enemyClasses.add(Bacteria.class);
-      ++classCount;
+      List<Class<? extends Enemy>> enemyClasses = ModelManager.getInstance().getListOfEnemy();
       Random random = new Random(System.currentTimeMillis());
-      Enemy newEnemy;
-      switch(random.nextInt(classCount)) {
-        case 0:
-          newEnemy = new Bacteria(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
-          newEnemy.addObserver(this);
-          gameObjects.add(newEnemy);
+      try {
+        Enemy newEnemy = enemyClasses.get(random.nextInt(enemyClasses.size()))
+            .getConstructor(Vector.class)
+            .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
+        newEnemy.addObserver(this);
+        gameObjects.add(newEnemy);
+        new CopyOnWriteArrayList<>(gameListeners)
+            .forEach(listener -> listener.gameObjectSpawned(this, newEnemy));
+      } catch (Exception exception) {
+        System.out.println(exception.getMessage());
+        exception.printStackTrace();
       }
     }
   }
@@ -282,16 +325,21 @@ public class GameController implements Runnable, Observer {
    * Randomly spawns power ups.
    */
   private void spawnPowerUps() {
-    if (currentTime - timeSinceLastPowerUpSpawn > NANOSECONDS_IN_A_MILLISECOND * 5000) {
+    if (currentTime - timeSinceLastPowerUpSpawn > NANOSECONDS_IN_A_SECOND * 5) {
       timeSinceLastPowerUpSpawn = currentTime;
-      List<Class<? extends PowerUp>> powerUpClasses = new ArrayList<>();
-      int classCount = 0;
-      powerUpClasses.add(ExtraLifePowerUp.class);
-      ++classCount;
+      List<Class<? extends PowerUp>> powerUpClasses = ModelManager.getInstance().getListOfPowerUp();
       Random random = new Random(System.currentTimeMillis());
-      switch(random.nextInt(classCount)) {
-        case 0:
-          gameObjects.add(new ExtraLifePowerUp(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0)));
+      try {
+        PowerUp newPowerUp = powerUpClasses.get(random.nextInt(powerUpClasses.size()))
+            .getConstructor(Vector.class)
+            .newInstance(new Vector(random.nextInt(gameDevice.getBufferWidth()), 0));
+        newPowerUp.addObserver(this);
+        gameObjects.add(newPowerUp);
+        new CopyOnWriteArrayList<>(gameListeners)
+            .forEach(listener -> listener.gameObjectSpawned(this, newPowerUp));
+      } catch (Exception exception) {
+        System.out.println(exception.getMessage());
+        exception.printStackTrace();
       }
     }
   }
@@ -300,6 +348,29 @@ public class GameController implements Runnable, Observer {
    * Ends the game - displays game over text and high score.
    */
   private void gameOver() {
-    // TODO
+    new CopyOnWriteArrayList<>(gameListeners).forEach(listener -> listener.gameOver(this));
+    InputState inputState;
+    do {
+      inputState = gameDevice.getInputState().clone();
+      try {
+        renderer.render(gameObjects, life, score, true);
+        Thread.sleep(TARGET_DELTA_TIME / NANOSECONDS_IN_A_MILLISECOND);
+      } catch (InterruptedException e) {
+        // Ignore interrupts, doesn't matter anyway.
+      }
+    } while (!inputState.isMenuKeyPressed());
+    isThreadRunning = false;
+  }
+
+  public boolean isThreadRunning() {
+    return isThreadRunning;
+  }
+
+  public void addGameListener(GameListener listener) {
+    gameListeners.add(listener);
+  }
+
+  public void removeGameListener(GameListener listener) {
+    gameListeners.remove(listener);
   }
 }

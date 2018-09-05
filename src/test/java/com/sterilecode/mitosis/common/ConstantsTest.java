@@ -1,8 +1,8 @@
 package com.sterilecode.mitosis.common;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming

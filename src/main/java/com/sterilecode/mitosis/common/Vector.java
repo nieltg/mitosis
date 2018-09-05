@@ -4,115 +4,97 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 /**
- * Created by Reinaldo on 4/22/2017.
- */
-
-/**
  * A class that represent a 2D vector.
  */
 public class Vector {
-	/**
-	 * X component of the vector.
-	 */
-	private double x;
 
-	/**
-	 * Y component of the vector.
-	 */
-	private double y;
+  public static final double EPS = 1e-9;
+  private double vectorX;
+  private double vectorY;
 
-	/**
-	 * Default constructor.
-	 */
-	public Vector() {
-		x = 0;
-		y = 0;
-	}
+  /**
+   * Default constructor.
+   */
+  public Vector() {
+    vectorX = 0;
+    vectorY = 0;
+  }
 
-	/**
-	 * Parameterized constructor.
-	 *
-	 * @param x
-	 * @param y
-	 */
-	public Vector(double x, double y) {
-		this.x = x;
-		this.y = y;
-	}
+  /**
+   * Parameterized constructor.
+   */
+  public Vector(double vectorX, double vectorY) {
+    this.vectorX = vectorX;
+    this.vectorY = vectorY;
+  }
 
-	/**
-	 * getX.
-	 *
-	 * @return x
-	 */
-	public double getX() {
-		return x;
-	}
+  /**
+   * getX.
+   *
+   * @return vectorX
+   */
+  public double getX() {
+    return vectorX;
+  }
 
-	/**
-	 * getY.
-	 *
-	 * @return y
-	 */
-	public double getY() {
-		return y;
-	}
+  /**
+   * setX.
+   */
+  public void setX(final double vectorX) {
+    this.vectorX = vectorX;
+  }
 
-	/**
-	 * setX.
-	 *
-	 * @param x
-	 */
-	public void setX(final double x) {
-		this.x = x;
-	}
+  /**
+   * getY.
+   *
+   * @return vectorY
+   */
+  public double getY() {
+    return vectorY;
+  }
 
-	/**
-	 * setY.
-	 *
-	 * @param y
-	 */
-	public void setY(final double y) {
-		this.y = y;
-	}
+  /**
+   * setY.
+   */
+  public void setY(final double vectorY) {
+    this.vectorY = vectorY;
+  }
 
-	/**
-	 * equals.
-	 *
-	 * @param vector
-	 * @return boolean
-	 */
-	public boolean equals(final Vector vector) {
-		return (x == vector.x && y == vector.y);
-	}
+  /**
+   * equals.
+   *
+   * @return boolean
+   */
+  public boolean equals(final Vector vector) {
+    return (Math.abs(vectorX - vector.vectorX) < EPS && Math.abs(vectorY - vector.vectorY) < EPS);
+  }
 
-	/**
-	 * add.
-	 *
-	 * @param vector
-	 * @return Vector
-	 */
-	public Vector add(final Vector vector) {
-		return new Vector(x + vector.x, y + vector.y);
-	}
+  /**
+   * add.
+   *
+   * @return Vector
+   */
+  public Vector add(final Vector vector) {
+    return new Vector(vectorX + vector.vectorX, vectorY + vector.vectorY);
+  }
 
-	/**
-	 * multiply.
-	 *
-	 * @param multiplier
-	 * @return Vector
-	 */
-	public Vector multiply(final double multiplier) {
-		return new Vector(x * multiplier, y * multiplier);
-	}
+  /**
+   * multiply.
+   *
+   * @return Vector
+   */
+  public Vector multiply(final double multiplier) {
+    return new Vector(vectorX * multiplier, vectorY * multiplier);
+  }
 
-	/**
-	 * rotate.
-	 *
-	 * @param rotation
-	 * @return Vector
-	 */
-	public Vector rotate(final double rotation) {
-		return new Vector(x*cos(rotation) - y*sin(rotation), x*sin(rotation) + y*cos(rotation));
-	}
+  /**
+   * rotate.
+   *
+   * @return Vector
+   */
+  public Vector rotate(final double rotation) {
+    return new Vector(vectorX * cos(rotation) - vectorY * sin(rotation),
+        vectorX * sin(rotation) + vectorY
+            * cos(rotation));
+  }
 }

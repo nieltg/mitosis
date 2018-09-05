@@ -1,10 +1,10 @@
 package com.sterilecode.mitosis.model.gameobject.bullet;
 
+import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
+
 import com.sterilecode.mitosis.common.Vector;
 import com.sterilecode.mitosis.model.gameobject.GameObject;
 import com.sterilecode.mitosis.model.gameobject.player.Player;
-
-import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
 
 /*
  * Mitosis - IF2210 Object-oriented Programming
@@ -24,9 +24,6 @@ import static com.sterilecode.mitosis.common.Constants.NANOSECONDS_IN_A_SECOND;
  */
 public class Bullet extends GameObject {
 
-  /**
-   * Owner of the bullet.
-   */
   private Player owner;
 
   /**
@@ -38,7 +35,8 @@ public class Bullet extends GameObject {
   }
 
   /**
-   * getOwner
+   * Return this bullet's owning player (the player that fired this bullet).
+   *
    * @return Player
    */
   public Player getOwner() {
@@ -47,9 +45,11 @@ public class Bullet extends GameObject {
 
   /**
    * Move bullet according to its velocity.
+   *
    * @param deltaTime Time between updates in nanoseconds.
    */
   public void update(long deltaTime) {
-    setPosition(getPosition().add(getVelocity().multiply(deltaTime / (double) NANOSECONDS_IN_A_SECOND)));
+    setPosition(
+        getPosition().add(getVelocity().multiply(deltaTime / (double) NANOSECONDS_IN_A_SECOND)));
   }
 }

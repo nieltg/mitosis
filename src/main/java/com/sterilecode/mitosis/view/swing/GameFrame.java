@@ -33,6 +33,9 @@ public class GameFrame extends JFrame implements GameDevice, KeyListener {
   private InputState inputState;
   private Map<Integer, Consumer<Boolean>> keyMap;
 
+  /**
+   * Creates a new game frame (window).
+   */
   public GameFrame() {
 
     // Set up window and drawing surface
@@ -43,9 +46,15 @@ public class GameFrame extends JFrame implements GameDevice, KeyListener {
     getContentPane().setPreferredSize(new Dimension(BUFFER_WIDTH, BUFFER_HEIGHT));
     pack();
     insets = this.getInsets();
-    setVisible(true);
     createBufferStrategy(BUFFER_COUNT);
 
+    resetInputState();
+  }
+
+  /**
+   * Reset the input state, set up the key map.
+   */
+  public synchronized void resetInputState() {
     // Prepare to receive input
     inputState = new InputState();
 
@@ -58,9 +67,26 @@ public class GameFrame extends JFrame implements GameDevice, KeyListener {
     keyMap.put(KeyEvent.VK_A, inputState::setPlayer2RotateLeftKeyPressed);
     keyMap.put(KeyEvent.VK_D, inputState::setPlayer2RotateRightKeyPressed);
     keyMap.put(KeyEvent.VK_S, inputState::setPlayer2ShootKeyPressed);
+  }
 
-    // Begin listening for key input events
-    addKeyListener(this);
+  /**
+   * Shows this game frame.
+   */
+  public synchronized void showFrame() {
+    if (!isVisible()) {
+      addKeyListener(this); // Begin listening for key input events
+      setVisible(true);
+    }
+  }
+
+  /**
+   * Hides this game frame.
+   */
+  public synchronized void hideFrame() {
+    if (isVisible()) {
+      removeKeyListener(this);
+      setVisible(false);
+    }
   }
 
   @Override
