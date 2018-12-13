@@ -1,23 +1,23 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+}
+
+version = '0.1'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile rootProject
+
+    compile project(':app')
 }
 
 jar {
     manifest {
         attributes(
-                'Sterilecode-Mitosis-Plugin-Name':
-                        'GamePak',
-                'Sterilecode-Mitosis-Plugin-Version':
-                        'v0.1',
+            'Sterilecode-Mitosis-Plugin-Name': 'GamePak',
+            'Sterilecode-Mitosis-Plugin-Version': version,
 
-                'Sterilecode-Mitosis-Plugin-Class':
-                        'com.sterilecode.mitosis.gamepak.GamePakPlugin'
+            'Sterilecode-Mitosis-Plugin-Class':
+                'com.sterilecode.mitosis.gamepak.GamePakPlugin'
         )
     }
 }
-
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
