@@ -1,5 +1,7 @@
 # Mitosis
 
+![Mitosis Gameplay](doc/Screencast-1.gif)
+
 Protect the body and kill the germs in **Mitosis**, simple germ shooter game which is also a submission for **IF2210 Object-Oriented Programming** assignment. **Mitosis** can be played by one or two players with different keys for controlling the 2<sup>nd</sup> syringe shooter.
 
 ## Getting Started
@@ -18,7 +20,7 @@ java -jar mitosis-VERSION.jar
 
 The `VERSION` parts in the statements above must be adjusted to the one which has been downloaded before at previous step.
 
-### Game Play
+### Gameplay
 
 Shoot all germs are passing from the top of the screen using the syringe shooter. Don't let them reach the bottom of the screen or the live points will be decreased. The game overs when the live points reaches zero.
 
