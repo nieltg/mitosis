@@ -1,5 +1,7 @@
 # Mitosis
 
+[![Build Status](https://travis-ci.org/nieltg/mitosis.svg?branch=master)](https://travis-ci.org/nieltg/mitosis)
+
 Protect the body and kill the germs in **Mitosis**, simple germ shooter game which is also a submission for **IF2210 Object-Oriented Programming** assignment. **Mitosis** can be played by one or two players with different keys for controlling the 2<sup>nd</sup> syringe shooter.
 
 ## Getting Started
