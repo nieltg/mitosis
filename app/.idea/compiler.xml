@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="com.sterilecode.mitosis_main" target="1.8" />
+      <module name="com.sterilecode.mitosis_test" target="1.8" />
+      <module name="gamepak_main" target="1.8" />
+      <module name="gamepak_test" target="1.8" />
+      <module name="musicpak_main" target="1.8" />
+      <module name="musicpak_test" target="1.8" />
+      <module name="repo_main" target="1.8" />
+      <module name="repo_test" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
