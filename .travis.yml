@@ -1,0 +1,22 @@
+language: java
+jdk: openjdk8
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_API_KEY
+  skip_cleanup: true
+  file_glob: true
+  draft: true
+  file:
+    - app/build/libs/*.jar
+    - plugins/*/build/libs/*.jar
+  on:
+    tags: true
