@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.jar.Attributes;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 /**
@@ -34,7 +36,7 @@ public class Plugin {
    * @throws PluginException whether there is plugin error
    */
   public Plugin(URL url) throws IOException, PluginException {
-    this(new URLClassLoader(new URL[]{url}, Plugin.class.getClassLoader()));
+    this(new URLClassLoader(new URL[]{url}));
   }
 
   /**
@@ -48,10 +50,22 @@ public class Plugin {
     // Keep class loader for class-loading.
     pluginClassLoader = loader;
 
+    Enumeration<URL> manifestUrls = loader.getResources(JarFile.MANIFEST_NAME);
+
+    // Get last manifest which is owned by plugin, not the app.
+    URL manifestUrl = null;
+
+    while (manifestUrls.hasMoreElements()) {
+      manifestUrl = manifestUrls.nextElement();
+    }
+
     // Parse plugin info in manifest file.
-    Manifest manifest = new Manifest(loader.getResourceAsStream("META-INF/MANIFEST.MF"));
+    Manifest manifest = new Manifest(manifestUrl.openStream());
 
     Attributes attributes = manifest.getMainAttributes();
+    for (java.util.Map.Entry<Object, Object> p : attributes.entrySet()) {
+      System.out.println(p.getKey().toString() + ": " + p.getValue().toString());
+    }
 
     pluginName = attributes.getValue("Sterilecode-Mitosis-Plugin-Name");
     if (pluginName == null) {

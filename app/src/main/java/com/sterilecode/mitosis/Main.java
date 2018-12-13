@@ -48,6 +48,7 @@ public class Main {
       pluginManager.discoverPluginsInDefaultDirectory();
     } catch (Exception e) {
       System.out.println("DEBUG: Failed to discover plugins.");
+      e.printStackTrace();
     }
 
     // Load plugins

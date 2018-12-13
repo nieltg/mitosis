@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PluginManager {
-
-  // TODO: Development environment!
-  public static final String PLUGINS_DIR = "build/plugins";
+  public static final String PLUGINS_DIR = "plugins";
 
   private static final PluginManager pluginManagerInstance = new PluginManager();
 
@@ -49,7 +47,14 @@ public class PluginManager {
     File[] jarFiles = pluginDir.listFiles((file, name) -> name.toLowerCase().endsWith(".jar"));
 
     for (File jarFile : jarFiles) {
-      pluginList.add(new Plugin(jarFile.toURI().toURL()));
+      System.out.println(jarFile.toString());
+
+      try {
+        pluginList.add(new Plugin(jarFile.toURI().toURL()));
+      } catch (Exception e) {
+        System.out.println("Unable to load plugin");
+        e.printStackTrace();
+      }
     }
   }
 
