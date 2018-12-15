@@ -95,6 +95,10 @@ The build process will also tests the unit tests, check the coding style, analyz
 ./gradlew run
 ```
 
+## License
+
+[MIT](LICENSE)
+
 ## Credits
 
 **Mitosis** is bought to you by **Sterilecode** team:
